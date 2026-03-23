@@ -1408,8 +1408,8 @@ function renderStreaks(){
 // ══ HEALTH SUBNAV ══
 function switchHealthSub(sub){
   ['today','history','calendar'].forEach(s=>{
-    document.getElementById('healthPanel'+s.charAt(0).toUpperCase()+s.slice(1)).style.display=s===sub?'block':'none';
-    document.getElementById('healthSub'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===sub);
+    document.getElementById(s==='calendar'?'healthPanelCal':'healthPanel'+s.charAt(0).toUpperCase()+s.slice(1)).style.display=s===sub?'block':'none';
+    document.getElementById(s==='calendar'?'healthSubCal':'healthSub'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===sub);
   });
   if(sub==='history')renderHealthHistoryFull();
   if(sub==='calendar')renderMiniCal('health');
@@ -1554,8 +1554,8 @@ function saveGoals(){const goals={protein:parseInt(document.getElementById('goal
 // ══ DIET SUBNAV ══
 function switchDietSub(sub){
   ['today','history','calendar'].forEach(s=>{
-    document.getElementById('dietPanel'+s.charAt(0).toUpperCase()+s.slice(1)).style.display=s===sub?'block':'none';
-    document.getElementById('dietSub'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===sub);
+    document.getElementById(s==='calendar'?'dietPanelCal':'dietPanel'+s.charAt(0).toUpperCase()+s.slice(1)).style.display=s===sub?'block':'none';
+    document.getElementById(s==='calendar'?'dietSubCal':'dietSub'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===sub);
   });
   if(sub==='history')renderDietHistoryFull();
   if(sub==='calendar')renderMiniCal('diet');
