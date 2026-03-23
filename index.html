@@ -21,17 +21,11 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .nav-btn.active{color:var(--accent);}.nav-btn span{font-size:1.2rem;line-height:1;}
 .section{padding:20px 16px 8px;}
 .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;color:var(--accent);margin-bottom:12px;}
-
-/* WEEK HEADER */
 .week-header{padding:18px 16px 6px;display:flex;align-items:center;justify-content:space-between;}
 .week-label{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:var(--accent);}
-
-/* ADD NEXT WEEK BTN */
 .add-week-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:4px 16px 20px;border:2px dashed var(--border);border-radius:var(--radius);padding:15px;background:transparent;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--muted);cursor:pointer;width:calc(100% - 32px);}
 .add-week-btn:active{background:var(--green-light);color:var(--green);border-color:var(--green);}
 .add-week-btn.locked{opacity:.4;cursor:default;}
-
-/* DAY CARDS — with edit strip */
 .day-card{background:var(--card);border-radius:var(--radius);margin:0 16px 10px;box-shadow:var(--shadow);overflow:hidden;}
 .day-card-inner{display:flex;align-items:stretch;}
 .day-card-main{flex:1;cursor:pointer;}
@@ -58,8 +52,6 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .strip-btn:active{color:var(--accent);}
 .strip-del{color:#ddd;}
 .strip-del:active{color:var(--red)!important;}
-
-/* WORKOUT VIEW */
 .workout-header{background:var(--accent);color:white;padding:16px 20px 20px;}
 .back-btn{background:rgba(255,255,255,.15);border:none;color:white;padding:6px 12px 6px 8px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px;}
 .workout-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;line-height:1.1;}
@@ -69,6 +61,8 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .exercise-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;}
 .exercise-name{font-size:.95rem;font-weight:800;color:var(--text);}
 .exercise-target{font-size:.7rem;color:var(--muted);font-weight:600;margin-top:2px;}
+/* LAST SESSION SPLITS */
+.last-session{font-size:.68rem;color:var(--purple);font-weight:700;margin-top:4px;background:var(--purple-light);border-radius:6px;padding:4px 8px;display:inline-block;}
 .ex-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
 .ex-toggle{background:var(--input-bg);border:none;border-radius:8px;width:32px;height:32px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:transform .2s;}
 .ex-toggle.open{transform:rotate(180deg);}
@@ -100,11 +94,9 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .mob-text{font-size:.82rem;font-weight:600;color:#333;}
 .finish-btn{margin:20px 16px 0;width:calc(100% - 32px);background:var(--green);color:white;border:none;border-radius:var(--radius);padding:18px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;cursor:pointer;transition:background .15s,transform .1s;}
 .finish-btn:active{transform:scale(.98);background:#175e2d;}
-
-/* ALL MODALS */
-.modal-overlay,.habit-modal-overlay,.supp-modal-overlay,.goals-modal-overlay,.day-modal-overlay,.ex-add-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;visibility:hidden;}
-.modal-overlay.open,.habit-modal-overlay.open,.supp-modal-overlay.open,.goals-modal-overlay.open,.day-modal-overlay.open,.ex-add-modal-overlay.open{display:flex;visibility:visible;}
-.modal-sheet,.day-modal-sheet,.ex-add-modal-sheet{background:white;border-radius:20px 20px 0 0;padding:20px 20px 36px;width:100%;max-height:88vh;overflow-y:auto;}
+.modal-overlay,.habit-modal-overlay,.supp-modal-overlay,.goals-modal-overlay,.day-modal-overlay,.ex-add-modal-overlay,.health-edit-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;visibility:hidden;}
+.modal-overlay.open,.habit-modal-overlay.open,.supp-modal-overlay.open,.goals-modal-overlay.open,.day-modal-overlay.open,.ex-add-modal-overlay.open,.health-edit-modal-overlay.open{display:flex;visibility:visible;}
+.modal-sheet,.day-modal-sheet,.ex-add-modal-sheet,.health-edit-modal-sheet{background:white;border-radius:20px 20px 0 0;padding:20px 20px 36px;width:100%;max-height:88vh;overflow-y:auto;}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.04em;margin-bottom:16px;}
 .modal-label{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block;}
 .modal-input{width:100%;background:var(--input-bg);border:1.5px solid transparent;border-radius:10px;padding:12px 14px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:14px;}
@@ -123,13 +115,9 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .hm-save{flex:1;background:var(--accent);color:white;border:none;border-radius:10px;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.08em;cursor:pointer;}
 .hm-cancel,.sm-cancel{background:var(--input-bg);color:var(--muted);border:none;border-radius:10px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;}
 .sm-save{flex:1;background:var(--purple);color:white;border:none;border-radius:10px;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.08em;cursor:pointer;}
-
-/* BADGE PICKER */
 .badge-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
 .badge-opt{padding:7px 14px;border-radius:20px;border:2px solid transparent;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
 .badge-opt.selected{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent);}
-
-/* CALENDAR */
 .cal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;background:var(--accent);color:white;}
 .cal-month{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;}
 .cal-nav-btn{background:rgba(255,255,255,.15);border:none;color:white;width:34px;height:34px;border-radius:8px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
@@ -150,15 +138,18 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .cal-detail-date{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;}
 .cal-detail-close{background:var(--input-bg);border:none;border-radius:8px;padding:6px 12px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--muted);cursor:pointer;flex-shrink:0;}
 .cal-detail-body{padding:12px 16px 16px;}
+.cal-detail-section{margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:16px;}
+.cal-detail-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.cal-section-title{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
 .cal-workout-row{padding:8px 0;border-bottom:1px solid var(--border);}
 .cal-workout-row:last-child{border-bottom:none;}
 .cal-workout-name{font-size:.88rem;font-weight:700;color:var(--text);}
 .cal-workout-sets{font-size:.7rem;color:var(--muted);font-weight:600;margin-top:2px;}
-.cal-empty-day{text-align:center;padding:20px;color:var(--muted);font-size:.82rem;font-weight:600;}
+.cal-empty-day{text-align:center;padding:16px;color:var(--muted);font-size:.82rem;font-weight:600;}
 .cal-mark-btn{background:var(--green-light);color:var(--green);border:none;border-radius:8px;padding:6px 12px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:800;cursor:pointer;margin-top:10px;display:inline-block;}
 .cal-mark-btn.marked{background:var(--green);color:white;}
-
-/* HEALTH */
+.cal-data-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:.8rem;font-weight:600;color:var(--text);}
+.cal-data-label{color:var(--muted);font-size:.72rem;}
 .health-hero{background:linear-gradient(135deg,#1a1a1a,#2d2d2d);color:white;padding:24px 20px 20px;}
 .health-hero-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;line-height:1;}
 .health-hero-sub{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:4px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
@@ -206,8 +197,6 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .tip-body-health{font-size:.82rem;font-weight:600;color:#1a3a24;line-height:1.5;}
 .save-day-btn{margin:16px 16px 0;width:calc(100% - 32px);background:var(--accent);color:white;border:none;border-radius:var(--radius);padding:18px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;cursor:pointer;transition:background .15s,transform .1s;}
 .save-day-btn:active{transform:scale(.98);}
-
-/* SUPPLEMENTS */
 .supp-card{background:var(--card);border-radius:var(--radius);margin:12px 16px 0;box-shadow:var(--shadow);overflow:hidden;}
 .supp-card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;}
 .supp-card-title{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
@@ -231,8 +220,6 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .supp-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;border-top:1px solid var(--border);}
 .supp-all-done-msg{font-size:.75rem;font-weight:800;color:var(--purple);}
 .supp-add-btn{background:var(--purple-light);border:none;border-radius:8px;padding:7px 12px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--purple);cursor:pointer;}
-
-/* HISTORY */
 .history-empty{text-align:center;padding:60px 30px;color:var(--muted);}
 .history-empty .big{font-size:3rem;margin-bottom:12px;}
 .history-empty p{font-size:.85rem;font-weight:600;line-height:1.6;}
@@ -255,8 +242,6 @@ body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:white;padding:12px 22px;border-radius:30px;font-size:.82rem;font-weight:700;opacity:0;transition:all .3s ease;z-index:999;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
-
-/* DIET */
 .diet-hero{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);color:white;padding:24px 20px 20px;}
 .diet-hero-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;line-height:1;}
 .diet-hero-sub{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:4px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
@@ -316,13 +301,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .goals-save{flex:1;background:var(--accent);color:white;border:none;border-radius:10px;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;cursor:pointer;}
 .goals-cancel{background:var(--input-bg);color:var(--muted);border:none;border-radius:10px;padding:14px 18px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;}
 .over-budget{color:var(--red)!important;}.on-track{color:var(--green)!important;}
-
-/* SUBNAV */
 .subnav-wrap{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:50;}
 .subnav-btn{flex:1;padding:12px;background:none;border:none;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
 .subnav-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-
-/* HEALTH/DIET HISTORY CARDS */
 .hh-entry{background:var(--card);border-radius:var(--radius);margin:0 16px 10px;box-shadow:var(--shadow);overflow:hidden;}
 .hh-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
 .hh-date{font-size:.92rem;font-weight:800;}
@@ -333,6 +314,31 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .hh-label{flex:1;color:var(--text);}
 .hh-section-label{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 0 4px;}
 .hh-delete-btn{margin:8px 0 4px;width:100%;background:var(--red-light);color:var(--red);border:none;border-radius:10px;padding:11px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;}
+.hh-edit-btn{margin:4px 0;width:100%;background:var(--input-bg);color:var(--accent);border:none;border-radius:10px;padding:11px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;}
+/* HEALTH EDIT MODAL */
+.he-section-label{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;display:block;}
+.he-habit-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.he-habit-row:last-child{border-bottom:none;}
+.he-habit-check{width:26px;height:26px;border-radius:8px;border:2px solid var(--border);background:white;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.he-habit-check.done{background:var(--green);border-color:var(--green);}
+.he-habit-check.done::after{content:'✓';color:white;font-size:.85rem;font-weight:800;}
+.he-habit-name{font-size:.85rem;font-weight:700;flex:1;}
+.he-water-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.he-water-cup{width:36px;height:40px;border-radius:8px;border:2px solid #bee0fb;background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;}
+.he-water-cup.filled{background:#e3f2fd;border-color:#2196f3;}
+.he-water-cup.filled::after{content:'💧';font-size:1.1rem;}
+.he-water-cup:not(.filled)::after{content:'○';color:#bee0fb;}
+.he-mood-row{display:flex;gap:8px;justify-content:space-between;margin-bottom:8px;}
+.he-mood-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:10px;border:2px solid var(--border);background:white;cursor:pointer;}
+.he-mood-btn .me{font-size:1.3rem;line-height:1;}
+.he-mood-btn .mw{font-size:.52rem;font-weight:800;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;}
+.he-mood-btn.selected{border-color:var(--accent);background:#f0f0f0;}
+.he-supp-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.he-supp-row:last-child{border-bottom:none;}
+.he-supp-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:white;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;}
+.he-supp-check.done{background:var(--purple);border-color:var(--purple);}
+.he-supp-check.done::after{content:'✓';color:white;font-size:.75rem;font-weight:800;}
+.he-supp-name{font-size:.82rem;font-weight:700;flex:1;}
 </style>
 </head>
 <body>
@@ -391,6 +397,29 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <button class="modal-save" onclick="saveDayEdit()">SAVE</button>
     </div>
     <button class="modal-delete" onclick="confirmDeleteDay()">Delete This Day</button>
+  </div>
+</div>
+
+<!-- Health History Edit Modal -->
+<div class="health-edit-modal-overlay" id="healthEditModal">
+  <div class="health-edit-modal-sheet">
+    <div class="modal-title" id="healthEditTitle">Edit Health Entry</div>
+    <span class="he-section-label">☀️ Morning Routine</span>
+    <div id="he-morning"></div>
+    <span class="he-section-label">⚡ Afternoon</span>
+    <div id="he-afternoon"></div>
+    <span class="he-section-label">🌙 Evening</span>
+    <div id="he-evening"></div>
+    <span class="he-section-label">💊 Supplements</span>
+    <div id="he-supps"></div>
+    <span class="he-section-label">💧 Water (glasses)</span>
+    <div class="he-water-wrap" id="he-water"></div>
+    <span class="he-section-label">🧠 Mood</span>
+    <div class="he-mood-row" id="he-mood"></div>
+    <div class="modal-btn-row" style="margin-top:16px">
+      <button class="modal-cancel" onclick="closeHealthEditModal()">Cancel</button>
+      <button class="modal-save" onclick="saveHealthEdit()">SAVE</button>
+    </div>
   </div>
 </div>
 
@@ -508,10 +537,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
   </div>
   <div class="health-card">
-    <div class="health-card-header">
-      <div class="health-card-title">☀️ Morning Routine</div>
-      <button class="health-add-btn" onclick="addHabit('morning')">+ Add</button>
-    </div>
+    <div class="health-card-header"><div class="health-card-title">☀️ Morning Routine</div><button class="health-add-btn" onclick="addHabit('morning')">+ Add</button></div>
     <div id="hlist-morning"></div>
   </div>
   <div class="health-card">
@@ -525,10 +551,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
   </div>
   <div class="health-card">
-    <div class="health-card-header">
-      <div class="health-card-title">⚡ Beat the Afternoon Crash</div>
-      <button class="health-add-btn" onclick="addHabit('afternoon')">+ Add</button>
-    </div>
+    <div class="health-card-header"><div class="health-card-title">⚡ Beat the Afternoon Crash</div><button class="health-add-btn" onclick="addHabit('afternoon')">+ Add</button></div>
     <div id="hlist-afternoon"></div>
   </div>
   <div class="health-card">
@@ -545,10 +568,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
   </div>
   <div class="health-card">
-    <div class="health-card-header">
-      <div class="health-card-title">🌙 Evening Wind Down</div>
-      <button class="health-add-btn" onclick="addHabit('evening')">+ Add</button>
-    </div>
+    <div class="health-card-header"><div class="health-card-title">🌙 Evening Wind Down</div><button class="health-add-btn" onclick="addHabit('evening')">+ Add</button></div>
     <div id="hlist-evening"></div>
   </div>
   <div class="tip-card-health">
@@ -632,10 +652,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 </nav>
 
 <script>
-// ══ CONSTANTS ══
 const BADGE_TYPES=['push','pull','legs','full','upper','lower','cardio','rest','custom'];
 const BADGE_LABELS={push:'Push',pull:'Pull',legs:'Legs',full:'Full Body',upper:'Upper',lower:'Lower',cardio:'Cardio',rest:'Rest',custom:'Custom'};
 const MONTH_LABELS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MOOD_LABELS={1:'😴 Drained',2:'😐 Flat',3:'🙂 Okay',4:'😊 Good',5:'🔥 Locked In'};
 
 const DEFAULT_PLAN=[
   {id:'day1',name:'Day 1',focus:'Push',subtitle:'Chest, Shoulders & Triceps',badge:'push',scheduledDate:'2026-03-16',exercises:[{id:'bench',name:'Barbell Bench Press',target:'4 × 6–8 — control the descent',defaultSets:4},{id:'incline',name:'Incline Dumbbell Press',target:'3 × 8–10 — upper chest emphasis',defaultSets:3},{id:'shoulder',name:'Seated DB Shoulder Press',target:'3 × 8–10 — controlled tempo',defaultSets:3},{id:'lateral',name:'Lateral Raises',target:'3 × 12–15 — light, slow, deliberate',defaultSets:3},{id:'tricep',name:'Tricep Pushdowns (cable)',target:'3 × 12 — full extension',defaultSets:3},{id:'legraise',name:'Standing Leg Raises',target:'3 × 12–15 — control on the way down',defaultSets:3}],mobility:['Doorway chest stretch × 60s','Cross-body shoulder stretch × 30s/side','Wrist circles × 30s','Thoracic spine rotations × 10/side']},
@@ -698,6 +718,8 @@ let calYear,calMonth,selectedCalDate=null;
 let habitModalSection=null,habitModalEditId=null;
 let healthDay={checks:{},water:0,mood:null};
 let suppEditId=null,selectedBadge='push';
+let healthEditDate=null,healthEditState={};
+let copiedWorkout=null; // {focus, subtitle, badge, exercises, mobility}
 
 // ══ INIT ══
 document.addEventListener('DOMContentLoaded',()=>{
@@ -706,7 +728,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   calYear=now.getFullYear();calMonth=now.getMonth();
   if(!ls.get('wl_habits'))ls.set('wl_habits',JSON.parse(JSON.stringify(DEFAULT_HABITS)));
   if(!ls.get('wl_supplements'))ls.set('wl_supplements',JSON.parse(JSON.stringify(DEFAULT_SUPPLEMENTS)));
-  document.querySelectorAll('.modal-overlay,.habit-modal-overlay,.supp-modal-overlay,.goals-modal-overlay,.day-modal-overlay,.ex-add-modal-overlay').forEach(m=>m.classList.remove('open'));
+  document.querySelectorAll('.modal-overlay,.habit-modal-overlay,.supp-modal-overlay,.goals-modal-overlay,.day-modal-overlay,.ex-add-modal-overlay,.health-edit-modal-overlay').forEach(m=>m.classList.remove('open'));
   renderDayCards();
 });
 
@@ -728,13 +750,10 @@ function switchView(view){
 }
 function goHome(){if(currentDay)saveWS(currentDay.id,workoutState);switchView('home');}
 
-// ══ HOME — RENDER WEEKS ══
+// ══ HOME ══
 function renderDayCards(){
   const plan=getPlan(),completed=getCompleted();
-  const weeksList=document.getElementById('weeksList');
-  weeksList.innerHTML='';
-
-  // Group days by week (Monday-based)
+  const weeksList=document.getElementById('weeksList');weeksList.innerHTML='';
   const weeks={};
   plan.forEach(day=>{
     const d=new Date(day.scheduledDate+'T12:00:00');
@@ -743,7 +762,6 @@ function renderDayCards(){
     if(!weeks[key])weeks[key]=[];
     weeks[key].push(day);
   });
-
   Object.keys(weeks).sort().forEach(weekKey=>{
     const weekDays=weeks[weekKey];
     const wStart=new Date(weekKey+'T12:00:00');
@@ -752,120 +770,65 @@ function renderDayCards(){
     const wrapDiv=document.createElement('div');
     wrapDiv.innerHTML=`<div class="week-header"><div class="week-label">${weekLabel}</div></div>`;
     weeksList.appendChild(wrapDiv);
-
     weekDays.forEach(day=>{
       const card=document.createElement('div');card.className='day-card';
       const d=new Date(day.scheduledDate+'T12:00:00');
       const dateStr=d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
       const isDone=completed[day.scheduledDate];
-
       if(day.badge==='rest'){
-        card.innerHTML=`<div class="day-card-inner">
-          <div class="day-card-main" onclick="openWorkout(getPlan().find(x=>x.id==='${day.id}'))">
-            <div class="day-card-header">
-              <div class="day-left"><div class="day-num" style="font-size:1.4rem">😴</div><div><div class="day-name">Rest Day</div><div class="day-focus">Active Recovery</div><div class="day-date-label">${dateStr}</div></div></div>
-              <span class="day-badge badge-rest">Rest</span>
-            </div>
-          </div>
-          <div class="day-edit-strip">
-            <button class="strip-btn" onclick="event.stopPropagation();openDayModal('${day.id}')">✏️</button>
-            <button class="strip-btn strip-del" onclick="event.stopPropagation();confirmDeleteDay('${day.id}')">🗑</button>
-          </div>
-        </div>`;
+        const pasteBtn=copiedWorkout?`<button class="strip-btn" style="color:#1e7a3a;font-size:.7rem;font-weight:800" onclick="event.stopPropagation();pasteWorkout('${day.id}')">📋</button>`:'';
+        card.innerHTML=`<div class="day-card-inner"><div class="day-card-main" onclick="openWorkout(getPlan().find(x=>x.id==='${day.id}'))"><div class="day-card-header"><div class="day-left"><div class="day-num" style="font-size:1.4rem">😴</div><div><div class="day-name">Rest Day</div><div class="day-focus">Active Recovery</div><div class="day-date-label">${dateStr}</div></div></div><span class="day-badge badge-rest">Rest</span></div></div><div class="day-edit-strip">${pasteBtn}<button class="strip-btn" onclick="event.stopPropagation();openDayModal('${day.id}')">✏️</button><button class="strip-btn strip-del" onclick="event.stopPropagation();confirmDeleteDay('${day.id}')">🗑</button></div></div>`;
         weeksList.appendChild(card);return;
       }
-
       const state=getWS(day.id)||{};
       const totalSets=day.exercises.reduce((s,ex)=>s+(state[ex.id]?.sets?.length||ex.defaultSets),0);
       const doneSets=day.exercises.reduce((s,ex)=>s+(state[ex.id]?.sets?.filter(s=>s.done).length||0),0);
       const pct=totalSets?Math.round(doneSets/totalSets*100):0;
       const badgeLabel=BADGE_LABELS[day.badge]||day.focus;
-
-      card.innerHTML=`<div class="day-card-inner">
-        <div class="day-card-main" onclick="openWorkout(getPlan().find(x=>x.id==='${day.id}'))">
-          <div class="day-card-header">
-            <div class="day-left">
-              <div class="day-num">${d.getDate()}</div>
-              <div><div class="day-name">${day.focus}</div><div class="day-focus">${day.subtitle}</div><div class="day-date-label">${dateStr}</div></div>
-            </div>
-            <span class="day-badge badge-${day.badge}">${badgeLabel}</span>
-          </div>
-          ${isDone
-            ?`<div class="day-completed-badge">✅ Completed</div>`
-            :`<div class="day-progress-bar"><div class="day-progress-fill" style="width:${pct}%"></div></div>
-              <div class="day-stats">
-                <div class="day-stat"><strong>${day.exercises.length}</strong>exercises</div>
-                <div class="day-stat"><strong>${doneSets}/${totalSets}</strong>sets done</div>
-                <div class="day-stat"><strong>${pct}%</strong>complete</div>
-              </div>`
-          }
-        </div>
-        <div class="day-edit-strip">
-          <button class="strip-btn" onclick="event.stopPropagation();openDayModal('${day.id}')">✏️</button>
-          <button class="strip-btn strip-del" onclick="event.stopPropagation();confirmDeleteDay('${day.id}')">🗑</button>
-        </div>
-      </div>`;
+      const pasteBtn=copiedWorkout?`<button class="strip-btn" style="color:#1e7a3a;font-size:.7rem;font-weight:800" onclick="event.stopPropagation();pasteWorkout('${day.id}')">📋</button>`:'';
+      card.innerHTML=`<div class="day-card-inner"><div class="day-card-main" onclick="openWorkout(getPlan().find(x=>x.id==='${day.id}'))"><div class="day-card-header"><div class="day-left"><div class="day-num">${d.getDate()}</div><div><div class="day-name">${day.focus}</div><div class="day-focus">${day.subtitle}</div><div class="day-date-label">${dateStr}</div></div></div><span class="day-badge badge-${day.badge}">${badgeLabel}</span></div>${isDone?`<div class="day-completed-badge">✅ Completed</div>`:`<div class="day-progress-bar"><div class="day-progress-fill" style="width:${pct}%"></div></div><div class="day-stats"><div class="day-stat"><strong>${day.exercises.length}</strong>exercises</div><div class="day-stat"><strong>${doneSets}/${totalSets}</strong>sets done</div><div class="day-stat"><strong>${pct}%</strong>complete</div></div>`}</div><div class="day-edit-strip"><button class="strip-btn" style="font-size:.75rem" onclick="event.stopPropagation();copyWorkout('${day.id}')">📄</button>${pasteBtn}<button class="strip-btn" onclick="event.stopPropagation();openDayModal('${day.id}')">✏️</button><button class="strip-btn strip-del" onclick="event.stopPropagation();confirmDeleteDay('${day.id}')">🗑</button></div></div>`;
       weeksList.appendChild(card);
     });
   });
-
-  // Smart add-week button
   renderAddWeekBtn();
 }
 
 // ══ SMART ADD-WEEK BUTTON ══
 function canAddNextWeek(){
-  const plan=getPlan();
-  if(!plan.length)return false;
+  const plan=getPlan();if(!plan.length)return false;
   const dates=plan.map(d=>d.scheduledDate).sort();
   const lastDate=new Date(dates[dates.length-1]+'T12:00:00');
-  const lastWeekMon=new Date(lastDate);
-  lastWeekMon.setDate(lastDate.getDate()-((lastDate.getDay()+6)%7));
+  const lastWeekMon=new Date(lastDate);lastWeekMon.setDate(lastDate.getDate()-((lastDate.getDay()+6)%7));
   const today=new Date();today.setHours(0,0,0,0);
   return today>=lastWeekMon;
 }
-
 function renderAddWeekBtn(){
-  const wrap=document.getElementById('addWeekWrap');
-  wrap.innerHTML='';
+  const wrap=document.getElementById('addWeekWrap');wrap.innerHTML='';
   const btn=document.createElement('button');
   btn.className='add-week-btn'+(canAddNextWeek()?'':' locked');
   if(canAddNextWeek()){
-    btn.textContent='+ Add Next Week';
-    btn.onclick=addNextWeekAuto;
+    btn.textContent='+ Add Next Week';btn.onclick=addNextWeekAuto;
   } else {
-    const plan=getPlan();
-    const dates=plan.map(d=>d.scheduledDate).sort();
+    const plan=getPlan();const dates=plan.map(d=>d.scheduledDate).sort();
     const lastDate=new Date(dates[dates.length-1]+'T12:00:00');
-    const lastWeekMon=new Date(lastDate);
-    lastWeekMon.setDate(lastDate.getDate()-((lastDate.getDay()+6)%7));
+    const lastWeekMon=new Date(lastDate);lastWeekMon.setDate(lastDate.getDate()-((lastDate.getDay()+6)%7));
     btn.textContent='🔒 Next week unlocks '+lastWeekMon.toLocaleDateString('en-US',{month:'short',day:'numeric'});
     btn.onclick=null;
   }
   wrap.appendChild(btn);
 }
-
 function addNextWeekAuto(){
   const plan=getPlan();
   const dates=plan.map(d=>d.scheduledDate).sort();
   const lastDate=new Date(dates[dates.length-1]+'T12:00:00');
-
-  // Next Monday after last day
-  const nextMon=new Date(lastDate);
-  nextMon.setDate(lastDate.getDate()+1);
+  const nextMon=new Date(lastDate);nextMon.setDate(lastDate.getDate()+1);
   while(nextMon.getDay()!==1)nextMon.setDate(nextMon.getDate()+1);
-
-  // Get last week's days as template
-  const lastWeekMon=new Date(lastDate);
-  lastWeekMon.setDate(lastDate.getDate()-((lastDate.getDay()+6)%7));
+  const lastWeekMon=new Date(lastDate);lastWeekMon.setDate(lastDate.getDate()-((lastDate.getDay()+6)%7));
   const lastWeekKey=lastWeekMon.toISOString().split('T')[0];
   const templateDays=plan.filter(d=>{
-    const dm=new Date(d.scheduledDate+'T12:00:00');
-    dm.setDate(dm.getDate()-((dm.getDay()+6)%7));
+    const dm=new Date(d.scheduledDate+'T12:00:00');dm.setDate(dm.getDate()-((dm.getDay()+6)%7));
     return dm.toISOString().split('T')[0]===lastWeekKey;
   });
-
-  // Clone with new dates
   const existingDates=new Set(plan.map(d=>d.scheduledDate));
   const newDays=[];
   for(let i=0;i<7;i++){
@@ -874,35 +837,54 @@ function addNextWeekAuto(){
     if(existingDates.has(isoDate))continue;
     const template=templateDays[i];
     if(template){
-      newDays.push({
-        id:'day_'+isoDate,
-        name:template.name,
-        focus:template.focus,
-        subtitle:template.subtitle,
-        badge:template.badge,
-        scheduledDate:isoDate,
-        exercises:template.exercises.map(ex=>({...ex,id:ex.id+'_w'+Date.now()+'_'+i})),
-        mobility:[...(template.mobility||[])]
-      });
+      newDays.push({id:'day_'+isoDate,name:template.name,focus:template.focus,subtitle:template.subtitle,badge:template.badge,scheduledDate:isoDate,exercises:template.exercises.map(ex=>({...ex,id:ex.id+'_w'+Date.now()+'_'+i})),mobility:[...(template.mobility||[])]});
     } else {
       newDays.push({id:'rest_'+isoDate,name:'Rest',focus:'Rest Day',subtitle:'Active Recovery',badge:'rest',scheduledDate:isoDate,exercises:[],mobility:[]});
     }
   }
-  savePlan([...plan,...newDays]);
-  renderDayCards();
-  showToast('Next week added — same plan ✓');
+  savePlan([...plan,...newDays]);renderDayCards();showToast('Next week added — same plan ✓');
 }
 
-// ══ DAY EDIT MODAL ══
-function openDayModal(dayId){
+// ══ COPY / PASTE WORKOUT ══
+function copyWorkout(dayId){
   const plan=getPlan(),day=plan.find(d=>d.id===dayId);
-  editingDayId=dayId;
+  if(!day||day.badge==='rest')return;
+  copiedWorkout={
+    focus:day.focus,
+    subtitle:day.subtitle,
+    badge:day.badge,
+    exercises:day.exercises.map(ex=>({...ex})),
+    mobility:[...(day.mobility||[])]
+  };
+  renderDayCards();
+  showToast('Workout copied — tap 📋 to paste');
+}
+
+function pasteWorkout(targetDayId){
+  if(!copiedWorkout)return;
+  const plan=getPlan();
+  const idx=plan.findIndex(d=>d.id===targetDayId);
+  if(idx<0)return;
+  // Give each exercise a fresh ID to avoid collisions
+  const newExercises=copiedWorkout.exercises.map(ex=>({...ex,id:ex.id+'_p'+Date.now()+'_'+Math.random().toString(36).substr(2,4)}));
+  plan[idx].focus=copiedWorkout.focus;
+  plan[idx].subtitle=copiedWorkout.subtitle;
+  plan[idx].badge=copiedWorkout.badge;
+  plan[idx].exercises=newExercises;
+  plan[idx].mobility=[...(copiedWorkout.mobility||[])];
+  savePlan(plan);
+  renderDayCards();
+  showToast('Workout pasted ✓');
+}
+
+// ══ DAY EDIT ══
+function openDayModal(dayId){
+  const plan=getPlan(),day=plan.find(d=>d.id===dayId);editingDayId=dayId;
   document.getElementById('dayModalTitle').textContent='Edit Day';
   document.getElementById('dayEditFocus').value=(day.badge==='rest')?'':day.focus;
   document.getElementById('dayEditSubtitle').value=(day.badge==='rest')?'':day.subtitle;
   document.getElementById('dayEditDate').value=day.scheduledDate;
-  selectedBadge=day.badge||'push';
-  renderBadgePicker();
+  selectedBadge=day.badge||'push';renderBadgePicker();
   document.getElementById('dayEditModal').classList.add('open');
 }
 function closeDayModal(){document.getElementById('dayEditModal').classList.remove('open');editingDayId=null;}
@@ -917,8 +899,7 @@ function renderBadgePicker(){
   });
 }
 function saveDayEdit(){
-  const plan=getPlan(),idx=plan.findIndex(d=>d.id===editingDayId);
-  if(idx<0){closeDayModal();return;}
+  const plan=getPlan(),idx=plan.findIndex(d=>d.id===editingDayId);if(idx<0){closeDayModal();return;}
   const focus=document.getElementById('dayEditFocus').value.trim()||'Workout';
   const subtitle=document.getElementById('dayEditSubtitle').value.trim()||'';
   const dateVal=document.getElementById('dayEditDate').value;
@@ -931,13 +912,21 @@ function saveDayEdit(){
 }
 function confirmDeleteDay(dayId){
   const id=dayId||editingDayId;
-  if(confirm('Delete this day from your plan?')){
-    savePlan(getPlan().filter(d=>d.id!==id));
-    closeDayModal();renderDayCards();showToast('Day deleted');
-  }
+  if(confirm('Delete this day from your plan?')){savePlan(getPlan().filter(d=>d.id!==id));closeDayModal();renderDayCards();showToast('Day deleted');}
 }
 
 // ══ WORKOUT ══
+// Helper: get last logged session for a dayId by matching focus name
+function getLastSession(currentDayId){
+  const plan=getPlan();
+  const day=plan.find(d=>d.id===currentDayId);
+  if(!day)return null;
+  const history=getHistory();
+  // Find most recent entry for this same dayId or same focus type, excluding current session
+  const match=history.find(h=>h.dayId===currentDayId||(h.dayName===day.focus&&h.isoDate!==day.scheduledDate));
+  return match||null;
+}
+
 function openWorkout(day){
   if(!day||day.badge==='rest')return;
   currentDay=day;workoutState=getWS(day.id)||{};
@@ -953,22 +942,33 @@ function renderExercises(){
   const container=document.getElementById('exerciseList');container.innerHTML='';
   const plan=getPlan(),dayData=plan.find(d=>d.id===currentDay.id);
   if(!dayData)return;
+
+  // Get last session for splits
+  const lastSession=getLastSession(currentDay.id);
+  const lastExMap={};
+  if(lastSession){lastSession.exercises.forEach(ex=>{lastExMap[ex.name]=ex.sets.filter(s=>s.done&&(s.weight||s.reps));});}
+
   dayData.exercises.forEach((ex,exIdx)=>{
     const exState=workoutState[ex.id]||{sets:[]};
     const allDone=exState.sets.length>0&&exState.sets.every(s=>s.done);
     const card=document.createElement('div');card.className='exercise-card';card.id='excard-'+ex.id;
+
+    // Build last session splits string
+    let lastSplitHTML='';
+    const lastSets=lastExMap[ex.name];
+    if(lastSets&&lastSets.length>0){
+      const splitsStr=lastSets.map(s=>`${s.weight||'?'}×${s.reps||'?'}`).join(' · ');
+      lastSplitHTML=`<div class="last-session">📊 Last: ${splitsStr}</div>`;
+    }
+
     let setsHTML=`<div class="col-headers"><div class="col-h">Set</div><div class="col-h">Weight (lbs)</div><div class="col-h">Reps</div><div class="col-h">✓</div></div>`;
     exState.sets.forEach((set,si)=>{setsHTML+=`<div class="set-row" id="setrow-${ex.id}-${si}"><div class="set-label">${si+1}</div><input class="set-input" type="number" inputmode="decimal" placeholder="0" value="${set.weight}" oninput="updateSet('${ex.id}',${si},'weight',this.value)"><input class="set-input" type="number" inputmode="numeric" placeholder="0" value="${set.reps}" oninput="updateSet('${ex.id}',${si},'reps',this.value)"><button class="set-done-btn ${set.done?'done':''}" onclick="toggleSetDone('${ex.id}',${si})"></button></div>`;});
     setsHTML+=`<button class="add-set-btn" onclick="addSet('${ex.id}')">+ Add Set</button>`;
-    card.innerHTML=`<div class="exercise-top"><div style="flex:1;cursor:pointer" onclick="toggleExercise('${ex.id}')"><div class="exercise-name" id="exname-${ex.id}">${allDone?'✅ ':''}${ex.name}</div><div class="exercise-target" id="extarget-${ex.id}">${ex.target}</div></div><div class="ex-actions"><button class="ex-edit-btn" onclick="openExModal('${currentDay.id}','${ex.id}')">✏️</button><button class="ex-del-btn" onclick="deleteExercise('${ex.id}')">🗑</button><button class="ex-toggle ${exIdx===0?'open':''}" id="toggle-${ex.id}" onclick="toggleExercise('${ex.id}')">▾</button></div></div><div class="sets-container ${exIdx===0?'open':''}" id="sets-${ex.id}">${setsHTML}</div>`;
+    card.innerHTML=`<div class="exercise-top"><div style="flex:1;cursor:pointer" onclick="toggleExercise('${ex.id}')"><div class="exercise-name" id="exname-${ex.id}">${allDone?'✅ ':''}${ex.name}</div><div class="exercise-target" id="extarget-${ex.id}">${ex.target}</div>${lastSplitHTML}</div><div class="ex-actions"><button class="ex-edit-btn" onclick="openExModal('${currentDay.id}','${ex.id}')">✏️</button><button class="ex-del-btn" onclick="deleteExercise('${ex.id}')">🗑</button><button class="ex-toggle ${exIdx===0?'open':''}" id="toggle-${ex.id}" onclick="toggleExercise('${ex.id}')">▾</button></div></div><div class="sets-container ${exIdx===0?'open':''}" id="sets-${ex.id}">${setsHTML}</div>`;
     container.appendChild(card);
   });
-  // Add Exercise button
-  const addBtn=document.createElement('button');
-  addBtn.className='add-ex-btn';addBtn.textContent='+ Add Exercise';
-  addBtn.onclick=()=>openAddExModal(currentDay.id);
-  container.appendChild(addBtn);
-  // Mobility
+  const addBtn=document.createElement('button');addBtn.className='add-ex-btn';addBtn.textContent='+ Add Exercise';
+  addBtn.onclick=()=>openAddExModal(currentDay.id);container.appendChild(addBtn);
   if(dayData.mobility&&dayData.mobility.length>0){
     const mobCard=document.createElement('div');mobCard.className='mobility-card';
     const mobState=workoutState['_mobility']||[];
@@ -982,10 +982,8 @@ function deleteExercise(exId){
   const plan=getPlan(),dayData=plan.find(d=>d.id===currentDay.id);
   dayData.exercises=dayData.exercises.filter(e=>e.id!==exId);
   savePlan(plan);delete workoutState[exId];saveWS(currentDay.id,workoutState);
-  currentDay=getPlan().find(d=>d.id===currentDay.id);
-  renderExercises();showToast('Exercise removed');
+  currentDay=getPlan().find(d=>d.id===currentDay.id);renderExercises();showToast('Exercise removed');
 }
-
 function toggleExercise(exId){const sets=document.getElementById('sets-'+exId),toggle=document.getElementById('toggle-'+exId);const isOpen=sets.classList.contains('open');sets.classList.toggle('open',!isOpen);toggle.classList.toggle('open',!isOpen);}
 function updateSet(exId,si,field,val){workoutState[exId].sets[si][field]=val;saveWS(currentDay.id,workoutState);}
 function toggleSetDone(exId,si){
@@ -1009,32 +1007,20 @@ function finishWorkout(){
 function openExModal(dayId,exId){const plan=getPlan(),day=plan.find(d=>d.id===dayId),ex=day.exercises.find(e=>e.id===exId);editingExId=exId;editingDayId=dayId;document.getElementById('exEditName').value=ex.name;document.getElementById('exEditTarget').value=ex.target;document.getElementById('exEditModal').classList.add('open');}
 function closeExModal(){document.getElementById('exEditModal').classList.remove('open');editingExId=null;editingDayId=null;}
 function saveExEdit(){const plan=getPlan(),day=plan.find(d=>d.id===editingDayId),ex=day.exercises.find(e=>e.id===editingExId);ex.name=document.getElementById('exEditName').value.trim()||ex.name;ex.target=document.getElementById('exEditTarget').value.trim()||ex.target;savePlan(plan);closeExModal();renderExercises();showToast('Exercise updated');}
-
-function openAddExModal(dayId){
-  addExDayId=dayId;
-  document.getElementById('addExName').value='';
-  document.getElementById('addExTarget').value='';
-  document.getElementById('addExSets').value='3';
-  document.getElementById('addExModal').classList.add('open');
-}
+function openAddExModal(dayId){addExDayId=dayId;document.getElementById('addExName').value='';document.getElementById('addExTarget').value='';document.getElementById('addExSets').value='3';document.getElementById('addExModal').classList.add('open');}
 function closeAddExModal(){document.getElementById('addExModal').classList.remove('open');addExDayId=null;}
 function saveAddEx(){
-  const name=document.getElementById('addExName').value.trim();
-  if(!name){showToast('Exercise name required');return;}
+  const name=document.getElementById('addExName').value.trim();if(!name){showToast('Exercise name required');return;}
   const target=document.getElementById('addExTarget').value.trim()||'';
   const defaultSets=parseInt(document.getElementById('addExSets').value)||3;
   const plan=getPlan(),day=plan.find(d=>d.id===addExDayId);
   const newEx={id:'ex_'+Date.now(),name,target,defaultSets};
   day.exercises.push(newEx);savePlan(plan);
-  if(currentDay&&currentDay.id===addExDayId){
-    workoutState[newEx.id]={sets:Array.from({length:defaultSets},()=>({weight:'',reps:'',done:false}))};
-    saveWS(currentDay.id,workoutState);
-    currentDay=getPlan().find(d=>d.id===addExDayId);
-  }
+  if(currentDay&&currentDay.id===addExDayId){workoutState[newEx.id]={sets:Array.from({length:defaultSets},()=>({weight:'',reps:'',done:false}))};saveWS(currentDay.id,workoutState);currentDay=getPlan().find(d=>d.id===addExDayId);}
   closeAddExModal();renderExercises();showToast('Exercise added ✓');
 }
 
-// ══ CALENDAR ══
+// ══ CALENDAR — stacked workout + health + diet ══
 function renderCalendar(){
   document.getElementById('calMonthLabel').textContent=MONTH_LABELS[calMonth]+' '+calYear;
   const grid=document.getElementById('calGrid');grid.innerHTML='';
@@ -1058,15 +1044,80 @@ function renderCalendar(){
 }
 function calPrevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}selectedCalDate=null;document.getElementById('calDetail').innerHTML='';renderCalendar();}
 function calNextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}selectedCalDate=null;document.getElementById('calDetail').innerHTML='';renderCalendar();}
+
 function showCalDetail(isoDate,planDay,isDone,history){
-  selectedCalDate=isoDate;const detail=document.getElementById('calDetail');
-  const d=new Date(isoDate+'T12:00:00'),dateLabel=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  if(!planDay||planDay.badge==='rest'){detail.innerHTML=`<div class="cal-detail"><div class="cal-detail-header"><div class="cal-detail-date">${dateLabel}</div><button class="cal-detail-close" onclick="document.getElementById('calDetail').innerHTML=''">×</button></div><div class="cal-detail-body"><div class="cal-empty-day">😴 Rest Day</div></div></div>`;return;}
-  const histEntry=history.find(h=>h.isoDate===isoDate);let exRows='';
-  if(histEntry){histEntry.exercises.forEach(ex=>{const done=ex.sets.filter(s=>s.done);exRows+=`<div class="cal-workout-row"><div class="cal-workout-name">${ex.name}</div><div class="cal-workout-sets">${done.length>0?done.map(s=>`${s.weight||'?'}lbs × ${s.reps||'?'}`).join(', '):'No sets logged'}</div></div>`;});}
-  else{planDay.exercises.forEach(ex=>{exRows+=`<div class="cal-workout-row"><div class="cal-workout-name">${ex.name}</div><div class="cal-workout-sets">${ex.target}</div></div>`;});}
-  const markBtn=isDone?`<button class="cal-mark-btn marked" onclick="unmarkDay('${isoDate}')">✓ Completed</button>`:`<button class="cal-mark-btn" onclick="markDayDone('${isoDate}')">Mark Complete</button>`;
-  detail.innerHTML=`<div class="cal-detail"><div class="cal-detail-header"><div><div class="cal-detail-date">${dateLabel}</div><div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px">${planDay.focus} — ${planDay.subtitle}</div></div><button class="cal-detail-close" onclick="document.getElementById('calDetail').innerHTML=''">×</button></div><div class="cal-detail-body">${exRows}${markBtn}</div></div>`;
+  selectedCalDate=isoDate;
+  const detail=document.getElementById('calDetail');
+  const d=new Date(isoDate+'T12:00:00');
+  const dateLabel=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+
+  // ── WORKOUT SECTION ──
+  let workoutHTML='';
+  if(!planDay||planDay.badge==='rest'){
+    workoutHTML=`<div class="cal-empty-day">😴 Rest Day</div>`;
+  } else {
+    const histEntry=history.find(h=>h.isoDate===isoDate);
+    let exRows='';
+    if(histEntry){
+      histEntry.exercises.forEach(ex=>{const done=ex.sets.filter(s=>s.done);exRows+=`<div class="cal-workout-row"><div class="cal-workout-name">${ex.name}</div><div class="cal-workout-sets">${done.length>0?done.map(s=>`${s.weight||'?'}lbs × ${s.reps||'?'}`).join(', '):'No sets logged'}</div></div>`;});
+    } else {
+      planDay.exercises.forEach(ex=>{exRows+=`<div class="cal-workout-row"><div class="cal-workout-name">${ex.name}</div><div class="cal-workout-sets">${ex.target}</div></div>`;});
+    }
+    const markBtn=isDone?`<button class="cal-mark-btn marked" onclick="unmarkDay('${isoDate}')">✓ Completed</button>`:`<button class="cal-mark-btn" onclick="markDayDone('${isoDate}')">Mark Complete</button>`;
+    workoutHTML=`<div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-bottom:10px">${planDay.focus} — ${planDay.subtitle}</div>${exRows}${markBtn}`;
+  }
+
+  // ── HEALTH SECTION ──
+  const healthEntry=(ls.get('wl_health_history')||[]).find(h=>h.date===isoDate);
+  let healthHTML='';
+  if(healthEntry){
+    const habits=getHabits();
+    const checks=healthEntry.checks||{};
+    const allH=[...(habits.morning||[]),...(habits.afternoon||[]),...(habits.evening||[])];
+    const doneH=allH.filter(h=>checks[h.id]);
+    healthHTML+=`<div class="cal-data-row"><span style="font-size:.9rem">✅</span> <span>${doneH.length}/${allH.length} habits</span></div>`;
+    healthHTML+=`<div class="cal-data-row"><span>💧</span> <span>${healthEntry.water||0}/8 glasses</span></div>`;
+    if(healthEntry.mood)healthHTML+=`<div class="cal-data-row"><span>${MOOD_LABELS[healthEntry.mood]}</span></div>`;
+  } else {
+    healthHTML=`<div class="cal-empty-day" style="padding:10px 0">No health data logged</div>`;
+  }
+
+  // ── DIET SECTION ──
+  const dietEntry=(getDietHistory()).find(h=>h.date===isoDate);
+  const goals=getDietGoals();
+  let dietHTML='';
+  if(dietEntry){
+    const calPct=Math.min(Math.round(dietEntry.cals/goals.cals*100),100);
+    dietHTML+=`<div class="cal-data-row"><span>🔥</span><span>${dietEntry.cals} kcal <span class="cal-data-label">(${calPct}% of goal)</span></span></div>`;
+    dietHTML+=`<div class="cal-data-row" style="gap:12px;flex-wrap:wrap">`;
+    dietHTML+=`<span style="color:#ef4444;font-weight:800">${dietEntry.protein}g <span style="color:var(--muted);font-weight:600;font-size:.7rem">protein</span></span>`;
+    dietHTML+=`<span style="color:#f59e0b;font-weight:800">${dietEntry.carbs}g <span style="color:var(--muted);font-weight:600;font-size:.7rem">carbs</span></span>`;
+    dietHTML+=`<span style="color:#3b82f6;font-weight:800">${dietEntry.fat}g <span style="color:var(--muted);font-weight:600;font-size:.7rem">fat</span></span>`;
+    dietHTML+=`</div>`;
+  } else {
+    dietHTML=`<div class="cal-empty-day" style="padding:10px 0">No nutrition logged</div>`;
+  }
+
+  detail.innerHTML=`<div class="cal-detail">
+    <div class="cal-detail-header">
+      <div class="cal-detail-date">${dateLabel}</div>
+      <button class="cal-detail-close" onclick="document.getElementById('calDetail').innerHTML=''">×</button>
+    </div>
+    <div class="cal-detail-body">
+      <div class="cal-detail-section">
+        <div class="cal-section-title">🏋️ Workout</div>
+        ${workoutHTML}
+      </div>
+      <div class="cal-detail-section">
+        <div class="cal-section-title">❤️ Health</div>
+        ${healthHTML}
+      </div>
+      <div class="cal-detail-section">
+        <div class="cal-section-title">🥗 Nutrition</div>
+        ${dietHTML}
+      </div>
+    </div>
+  </div>`;
 }
 function markDayDone(isoDate){const c=getCompleted();c[isoDate]=true;saveCompleted(c);renderCalendar();showToast('Day marked complete ✓');}
 function unmarkDay(isoDate){const c=getCompleted();delete c[isoDate];saveCompleted(c);renderCalendar();showToast('Mark removed');}
@@ -1115,7 +1166,6 @@ const ENERGY_TIPS=[
   {icon:'😴',text:'Going to bed and waking at the same time every day — even weekends — is more impactful for energy than total hours slept.'},
   {icon:'☕',text:'Delaying your first caffeine 90–120 min after waking lets adenosine clear first — you get a bigger, cleaner boost.'},
 ];
-
 function renderHealthView(){
   healthDay=getHD();
   const now=new Date();
@@ -1181,7 +1231,7 @@ function switchHealthSub(sub){
   document.getElementById('healthSubHistory').classList.toggle('active',sub==='history');
   if(sub==='history')renderHealthHistoryFull();
 }
-const MOOD_LABELS={1:'😴 Drained',2:'😐 Flat',3:'🙂 Okay',4:'😊 Good',5:'🔥 Locked In'};
+
 function renderHealthHistoryFull(){
   const history=ls.get('wl_health_history')||[],habits=getHabits();
   const container=document.getElementById('healthHistoryFull');container.innerHTML='';
@@ -1208,6 +1258,7 @@ function renderHealthHistoryFull(){
         <div class="hh-row"><span class="hh-label">${entry.water||0}/8 glasses ${'💧'.repeat(entry.water||0)}</span></div>
         <div class="hh-section-label">🧠 Mood</div>
         <div class="hh-row"><span class="hh-label">${entry.mood?MOOD_LABELS[entry.mood]:'Not logged'}</span></div>
+        <button class="hh-edit-btn" onclick="openHealthEditModal('${entry.date}')">✏️ Edit This Entry</button>
         <button class="hh-delete-btn" onclick="deleteHealthHistory('${entry.date}')">Delete Entry</button>
       </div>`;
     container.appendChild(el);
@@ -1215,6 +1266,114 @@ function renderHealthHistoryFull(){
 }
 function toggleHHDetail(i){document.getElementById('hh-detail-'+i).classList.toggle('open');}
 function deleteHealthHistory(date){const history=(ls.get('wl_health_history')||[]).filter(h=>h.date!==date);ls.set('wl_health_history',history);renderHealthHistoryFull();renderStreaks();showToast('Entry deleted');}
+
+// ══ HEALTH HISTORY EDIT MODAL ══
+function openHealthEditModal(date){
+  healthEditDate=date;
+  const histKey='wl_health_history';
+  const history=ls.get(histKey)||[];
+  const existing=history.find(h=>h.date===date);
+
+  // Start from existing or blank
+  healthEditState={
+    checks:existing?{...existing.checks}:{},
+    water:existing?existing.water||0:0,
+    mood:existing?existing.mood:null,
+    suppChecks:{}
+  };
+
+  // Load supp checks for that date
+  const storedSuppChecks=ls.get('wl_supp_'+date)||{};
+  healthEditState.suppChecks={...storedSuppChecks};
+
+  const d=new Date(date+'T12:00:00');
+  document.getElementById('healthEditTitle').textContent='Edit: '+d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+
+  const habits=getHabits();
+  const supps=getSupplements();
+
+  // Render habits per section
+  ['morning','afternoon','evening'].forEach(section=>{
+    const container=document.getElementById('he-'+section);container.innerHTML='';
+    (habits[section]||[]).forEach(h=>{
+      const done=healthEditState.checks[h.id]||false;
+      const row=document.createElement('div');row.className='he-habit-row';
+      row.innerHTML=`<div class="he-habit-check ${done?'done':''}" id="hec-${h.id}" onclick="toggleHEHabit('${h.id}')"></div><span class="he-habit-name">${h.name}</span>${h.time?`<span style="font-size:.62rem;color:var(--muted);font-weight:700;background:var(--input-bg);padding:3px 7px;border-radius:20px">${h.time}</span>`:''}`;
+      container.appendChild(row);
+    });
+    if(!(habits[section]||[]).length)container.innerHTML=`<div style="font-size:.78rem;color:var(--muted);padding:6px 0">No habits in this section</div>`;
+  });
+
+  // Render supplements
+  const suppContainer=document.getElementById('he-supps');suppContainer.innerHTML='';
+  supps.forEach(supp=>{
+    const done=healthEditState.suppChecks[supp.id]||false;
+    const row=document.createElement('div');row.className='he-supp-row';
+    row.innerHTML=`<div class="he-supp-check ${done?'done':''}" id="hesc-${supp.id}" onclick="toggleHESupp('${supp.id}')"></div><span class="he-supp-name">${supp.name}</span>${supp.time?`<span style="font-size:.6rem;color:var(--purple);font-weight:700;background:var(--purple-light);padding:3px 8px;border-radius:20px">${supp.time}</span>`:''}`;
+    suppContainer.appendChild(row);
+  });
+
+  // Render water
+  renderHEWater();
+
+  // Render mood
+  renderHEMood();
+
+  document.getElementById('healthEditModal').classList.add('open');
+}
+
+function toggleHEHabit(id){
+  healthEditState.checks[id]=!healthEditState.checks[id];
+  const el=document.getElementById('hec-'+id);
+  if(el)el.className='he-habit-check'+(healthEditState.checks[id]?' done':'');
+}
+function toggleHESupp(id){
+  healthEditState.suppChecks[id]=!healthEditState.suppChecks[id];
+  const el=document.getElementById('hesc-'+id);
+  if(el)el.className='he-supp-check'+(healthEditState.suppChecks[id]?' done':'');
+}
+function renderHEWater(){
+  const container=document.getElementById('he-water');container.innerHTML='';
+  for(let i=0;i<8;i++){
+    const cup=document.createElement('div');
+    cup.className='he-water-cup'+(i<healthEditState.water?' filled':'');
+    cup.onclick=()=>{healthEditState.water=i<healthEditState.water?i:i+1;renderHEWater();};
+    container.appendChild(cup);
+  }
+}
+function renderHEMood(){
+  const container=document.getElementById('he-mood');container.innerHTML='';
+  const moods=[{v:1,e:'😴',w:'Drained'},{v:2,e:'😐',w:'Flat'},{v:3,e:'🙂',w:'Okay'},{v:4,e:'😊',w:'Good'},{v:5,e:'🔥',w:'Locked In'}];
+  moods.forEach(m=>{
+    const btn=document.createElement('button');
+    btn.className='he-mood-btn'+(healthEditState.mood===m.v?' selected':'');
+    btn.innerHTML=`<span class="me">${m.e}</span><span class="mw">${m.w}</span>`;
+    btn.onclick=()=>{healthEditState.mood=healthEditState.mood===m.v?null:m.v;renderHEMood();};
+    container.appendChild(btn);
+  });
+}
+function closeHealthEditModal(){document.getElementById('healthEditModal').classList.remove('open');healthEditDate=null;}
+function saveHealthEdit(){
+  if(!healthEditDate)return;
+  const histKey='wl_health_history';
+  const history=ls.get(histKey)||[];
+  const existing=history.findIndex(h=>h.date===healthEditDate);
+  const d=new Date(healthEditDate+'T12:00:00');
+  const entry={
+    date:healthEditDate,
+    displayDate:d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),
+    checks:healthEditState.checks,
+    water:healthEditState.water,
+    mood:healthEditState.mood
+  };
+  if(existing>=0)history[existing]=entry;else history.unshift(entry);
+  ls.set(histKey,history);
+  // Save supp checks for that date
+  ls.set('wl_supp_'+healthEditDate,healthEditState.suppChecks);
+  // Also update the daily health key so today's view reflects edits if same day
+  if(healthEditDate===todayKey()){healthDay={checks:entry.checks,water:entry.water,mood:entry.mood};saveHD(healthDay);}
+  closeHealthEditModal();renderHealthHistoryFull();renderStreaks();showToast('Entry updated ✓');
+}
 
 // ══ WORKOUT HISTORY ══
 function renderHistory(){
