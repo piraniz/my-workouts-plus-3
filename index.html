@@ -509,11 +509,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 <!-- HOME -->
 <div class="view active" id="viewHome">
-  <!-- Mini calendar for Workouts tab -->
-  <div class="mini-cal-wrap" id="homeMiniCal"></div>
-  <div id="homeMiniCalDetail"></div>
-  <div id="weeksList"></div>
-  <div id="addWeekWrap"></div>
+  <div class="subnav-wrap">
+    <button class="subnav-btn active" id="homeSubWeek" onclick="switchHomeSub('week')">This Week</button>
+    <button class="subnav-btn" id="homeSubCal" onclick="switchHomeSub('calendar')">Calendar</button>
+  </div>
+  <div id="homePanelWeek">
+    <div id="weeksList"></div>
+    <div id="addWeekWrap"></div>
+  </div>
+  <div id="homePanelCal" style="display:none">
+    <div class="mini-cal-wrap" id="homeMiniCal"></div>
+    <div id="homeMiniCalDetail"></div>
+    <div style="height:20px"></div>
+  </div>
 </div>
 
 <!-- WORKOUT -->
@@ -548,7 +556,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <div class="view" id="viewHealth">
   <div class="subnav-wrap">
     <button class="subnav-btn active" id="healthSubToday" onclick="switchHealthSub('today')">Today</button>
-    <button class="subnav-btn" id="healthSubHistory" onclick="switchHealthSub('history')">History</button>
     <button class="subnav-btn" id="healthSubCal" onclick="switchHealthSub('calendar')">Calendar</button>
   </div>
   <div id="healthPanelToday">
@@ -617,11 +624,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <button class="save-day-btn" onclick="saveHealthDay()">SAVE TODAY'S CHECK-IN</button>
     <div style="height:20px"></div>
   </div>
-  <div id="healthPanelHistory" style="display:none">
-    <div class="section"><div class="section-title">HEALTH HISTORY</div></div>
-    <div id="healthHistoryFull"></div>
-    <div style="height:20px"></div>
-  </div>
+
   <div id="healthPanelCal" style="display:none">
     <div class="mini-cal-wrap" id="healthMiniCal"></div>
     <div id="healthMiniCalDetail"></div>
@@ -633,7 +636,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <div class="view" id="viewDiet">
   <div class="subnav-wrap">
     <button class="subnav-btn active" id="dietSubToday" onclick="switchDietSub('today')">Today</button>
-    <button class="subnav-btn" id="dietSubHistory" onclick="switchDietSub('history')">History</button>
     <button class="subnav-btn" id="dietSubCal" onclick="switchDietSub('calendar')">Calendar</button>
   </div>
   <div id="dietPanelToday">
@@ -675,11 +677,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <button class="diet-save-btn" onclick="saveDietDay()">SAVE TODAY'S NUTRITION</button>
     <div style="height:20px"></div>
   </div>
-  <div id="dietPanelHistory" style="display:none">
-    <div class="section"><div class="section-title">NUTRITION HISTORY</div></div>
-    <div id="dietHistoryFull"></div>
-    <div style="height:20px"></div>
-  </div>
+
   <div id="dietPanelCal" style="display:none">
     <div class="mini-cal-wrap" id="dietMiniCal"></div>
     <div id="dietMiniCalDetail"></div>
@@ -687,18 +685,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   </div>
 </div>
 
-<!-- HISTORY -->
-<div class="view" id="viewHistory">
-  <div class="section"><div class="section-title">WORKOUT HISTORY</div></div>
-  <div id="historyList"></div>
-</div>
+
 
 <nav class="bottom-nav">
   <button class="nav-btn active" id="navHome" onclick="switchView('home')"><span>🏠</span>Workouts</button>
   <button class="nav-btn" id="navCalendar" onclick="switchView('calendar')"><span>📅</span>Calendar</button>
   <button class="nav-btn" id="navHealth" onclick="switchView('health')"><span>❤️</span>Health</button>
   <button class="nav-btn" id="navDiet" onclick="switchView('diet')"><span>🥗</span>Diet</button>
-  <button class="nav-btn" id="navHistory" onclick="switchView('history')"><span>📋</span>History</button>
+
 </nav>
 
 <script>
@@ -792,8 +786,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(!ls.get('wl_habits'))ls.set('wl_habits',JSON.parse(JSON.stringify(DEFAULT_HABITS)));
   if(!ls.get('wl_supplements'))ls.set('wl_supplements',JSON.parse(JSON.stringify(DEFAULT_SUPPLEMENTS)));
   document.querySelectorAll('.modal-overlay,.habit-modal-overlay,.supp-modal-overlay,.goals-modal-overlay,.day-modal-overlay,.ex-add-modal-overlay,.health-edit-modal-overlay').forEach(m=>m.classList.remove('open'));
-  renderDayCards();
-  renderMiniCal('home');
+  renderHomeSub();
 });
 
 // ══ NAV ══
@@ -801,16 +794,30 @@ function switchView(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('mainTopbar').style.display='flex';
-  const vmap={home:'viewHome',calendar:'viewCalendar',health:'viewHealth',diet:'viewDiet',history:'viewHistory',workout:'viewWorkout'};
-  const nmap={home:'navHome',calendar:'navCalendar',health:'navHealth',diet:'navDiet',history:'navHistory'};
+  const vmap={home:'viewHome',calendar:'viewCalendar',health:'viewHealth',diet:'viewDiet',workout:'viewWorkout'};
+  const nmap={home:'navHome',calendar:'navCalendar',health:'navHealth',diet:'navDiet'};
   document.getElementById(vmap[view]).classList.add('active');
   if(nmap[view])document.getElementById(nmap[view]).classList.add('active');
   if(view==='workout')document.getElementById('mainTopbar').style.display='none';
-  if(view==='home'){renderDayCards();renderMiniCal('home');}
+  if(view==='home')renderHomeSub();
   if(view==='calendar')renderCalendar();
   if(view==='health')renderHealthView();
   if(view==='diet')renderDietView();
-  if(view==='history')renderHistory();
+}
+
+// ══ HOME SUBNAV ══
+let homeSubCurrent='week';
+function switchHomeSub(sub){
+  homeSubCurrent=sub;
+  document.getElementById('homePanelWeek').style.display=sub==='week'?'block':'none';
+  document.getElementById('homePanelCal').style.display=sub==='calendar'?'block':'none';
+  document.getElementById('homeSubWeek').classList.toggle('active',sub==='week');
+  document.getElementById('homeSubCal').classList.toggle('active',sub==='calendar');
+  if(sub==='week')renderDayCards();
+  if(sub==='calendar')renderMiniCal('home');
+}
+function renderHomeSub(){
+  switchHomeSub(homeSubCurrent);
 }
 function goHome(){if(currentDay)saveWS(currentDay.id,workoutState);switchView('home');}
 
@@ -911,32 +918,12 @@ function showMiniCalDetail(tab,iso){
   let bodyHTML='';
 
   if(tab==='home'){
-    const plan=getPlan();
-    const planDay=plan.find(p=>p.scheduledDate===iso);
-    const completed=getCompleted();
-    const history=getHistory();
-    const isDone=completed[iso];
-    if(!planDay){
-      bodyHTML=`<div style="color:var(--muted);font-size:.82rem;font-weight:600;padding:8px 0">No workout planned for this day.</div>`;
-    } else if(planDay.badge==='rest'){
-      bodyHTML=`<div style="color:var(--muted);font-size:.82rem;font-weight:600;padding:8px 0">😴 Rest Day</div>`;
-    } else {
-      const histEntry=history.find(h=>h.isoDate===iso);
-      if(histEntry){
-        bodyHTML+=`<div style="font-size:.72rem;font-weight:700;color:var(--muted);margin-bottom:8px">${planDay.focus} — ${planDay.subtitle}</div>`;
-        histEntry.exercises.forEach(ex=>{
-          const done=ex.sets.filter(s=>s.done);
-          bodyHTML+=`<div class="cal-workout-row"><div class="cal-workout-name">${ex.name}</div><div class="cal-workout-sets">${done.length>0?done.map(s=>`${s.weight||'?'}lbs × ${s.reps||'?'}`).join(', '):'No sets logged'}</div></div>`;
-        });
-      } else {
-        bodyHTML+=`<div style="font-size:.72rem;font-weight:700;color:var(--muted);margin-bottom:8px">${planDay.focus} — ${planDay.subtitle}</div>`;
-        planDay.exercises.forEach(ex=>{bodyHTML+=`<div class="cal-workout-row"><div class="cal-workout-name">${ex.name}</div><div class="cal-workout-sets">${ex.target}</div></div>`;});
-      }
-      const markBtn=isDone
-        ?`<button class="cal-mark-btn marked" onclick="markDayDone('${iso}',true);renderMiniCal('home');showMiniCalDetail('home','${iso}')">✓ Completed</button>`
-        :`<button class="cal-mark-btn" onclick="markDayDone('${iso}',false);renderMiniCal('home');showMiniCalDetail('home','${iso}')">Mark Complete</button>`;
-      bodyHTML+=markBtn;
-    }
+    // Show the week cards for the tapped date's week
+    const wk=getWeekMonday(new Date(iso+'T12:00:00'));
+    // Render those week cards in weeksList
+    renderDayCards(wk);
+    // No inline detail panel needed — cards are shown below
+    bodyHTML=`<div style="color:var(--muted);font-size:.75rem;font-weight:700;padding:4px 0 0">Showing week below ↓</div>`;
   } else if(tab==='health'){
     const entry=(ls.get('wl_health_history')||[]).find(h=>h.date===iso);
     if(entry){
@@ -998,25 +985,43 @@ function openDietEditModal(iso){
 let dietEditOverrideDate=null;
 
 // ══ HOME ══
-function renderDayCards(){
+// Get the Monday of the week containing a given date
+function getWeekMonday(date){
+  const d=new Date(date);d.setHours(12,0,0,0);
+  d.setDate(d.getDate()-((d.getDay()+6)%7));
+  return d.toISOString().split('T')[0];
+}
+// Render only the current week's cards (or a specific week if weekKey passed)
+function renderDayCards(weekKey){
   const plan=getPlan(),completed=getCompleted();
-  const weeksList=document.getElementById('weeksList');weeksList.innerHTML='';
-  const weeks={};
-  plan.forEach(day=>{
-    const d=new Date(day.scheduledDate+'T12:00:00');
-    const mon=new Date(d);mon.setDate(d.getDate()-((d.getDay()+6)%7));
-    const key=mon.toISOString().split('T')[0];
-    if(!weeks[key])weeks[key]=[];
-    weeks[key].push(day);
+  const weeksList=document.getElementById('weeksList');
+  if(!weeksList)return;
+  weeksList.innerHTML='';
+  // Determine which week to show
+  const targetWeekKey=weekKey||getWeekMonday(new Date());
+  // Get days in that week
+  const weekDays=plan.filter(day=>{
+    return getWeekMonday(new Date(day.scheduledDate+'T12:00:00'))===targetWeekKey;
   });
-  Object.keys(weeks).sort().forEach(weekKey=>{
-    const weekDays=weeks[weekKey];
-    const wStart=new Date(weekKey+'T12:00:00');
-    const wEnd=new Date(weekKey+'T12:00:00');wEnd.setDate(wStart.getDate()+6);
+  // If no days in current week, find the nearest upcoming week
+  let finalWeekKey=targetWeekKey;
+  let finalDays=weekDays;
+  if(!weekDays.length&&!weekKey){
+    const allWeekKeys=[...new Set(plan.map(d=>getWeekMonday(new Date(d.scheduledDate+'T12:00:00'))))].sort();
+    const today=new Date();today.setHours(0,0,0,0);
+    const future=allWeekKeys.filter(k=>new Date(k+'T12:00:00')>=today);
+    const past=allWeekKeys.filter(k=>new Date(k+'T12:00:00')<today);
+    const chosen=future.length?future[0]:past[past.length-1];
+    if(chosen){finalWeekKey=chosen;finalDays=plan.filter(d=>getWeekMonday(new Date(d.scheduledDate+'T12:00:00'))===chosen);}
+  }
+  if(finalDays.length){
+    const wStart=new Date(finalWeekKey+'T12:00:00');
+    const wEnd=new Date(finalWeekKey+'T12:00:00');wEnd.setDate(wStart.getDate()+6);
     const weekLabel='WEEK OF '+wStart.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase()+' – '+wEnd.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();
     const wrapDiv=document.createElement('div');
     wrapDiv.innerHTML=`<div class="week-header"><div class="week-label">${weekLabel}</div></div>`;
     weeksList.appendChild(wrapDiv);
+    const weekDays=finalDays;
     weekDays.forEach(day=>{
       const card=document.createElement('div');card.className='day-card';
       const d=new Date(day.scheduledDate+'T12:00:00');
@@ -1036,7 +1041,7 @@ function renderDayCards(){
       card.innerHTML=`<div class="day-card-inner"><div class="day-card-main" onclick="openWorkout(getPlan().find(x=>x.id==='${day.id}'))"><div class="day-card-header"><div class="day-left"><div class="day-num">${d.getDate()}</div><div><div class="day-name">${day.focus}</div><div class="day-focus">${day.subtitle}</div><div class="day-date-label">${dateStr}</div></div></div><span class="day-badge badge-${day.badge}">${badgeLabel}</span></div>${isDone?`<div class="day-completed-badge">✅ Completed</div>`:`<div class="day-progress-bar"><div class="day-progress-fill" style="width:${pct}%"></div></div><div class="day-stats"><div class="day-stat"><strong>${day.exercises.length}</strong>exercises</div><div class="day-stat"><strong>${doneSets}/${totalSets}</strong>sets done</div><div class="day-stat"><strong>${pct}%</strong>complete</div></div>`}</div><div class="day-edit-strip"><button class="strip-btn" style="font-size:.75rem" onclick="event.stopPropagation();copyWorkout('${day.id}')">📄</button>${pasteBtn}<button class="strip-btn" onclick="event.stopPropagation();openDayModal('${day.id}')">✏️</button><button class="strip-btn strip-del" onclick="event.stopPropagation();confirmDeleteDay('${day.id}')">🗑</button></div></div>`;
       weeksList.appendChild(card);
     });
-  });
+  }
   renderAddWeekBtn();
 }
 
@@ -1407,11 +1412,12 @@ function renderStreaks(){
 
 // ══ HEALTH SUBNAV ══
 function switchHealthSub(sub){
-  ['today','history','calendar'].forEach(s=>{
-    document.getElementById(s==='calendar'?'healthPanelCal':'healthPanel'+s.charAt(0).toUpperCase()+s.slice(1)).style.display=s===sub?'block':'none';
-    document.getElementById(s==='calendar'?'healthSubCal':'healthSub'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===sub);
+  const panels={today:'healthPanelToday',calendar:'healthPanelCal'};
+  const btns={today:'healthSubToday',calendar:'healthSubCal'};
+  Object.keys(panels).forEach(s=>{
+    document.getElementById(panels[s]).style.display=s===sub?'block':'none';
+    document.getElementById(btns[s]).classList.toggle('active',s===sub);
   });
-  if(sub==='history')renderHealthHistoryFull();
   if(sub==='calendar')renderMiniCal('health');
 }
 
@@ -1553,11 +1559,12 @@ function saveGoals(){const goals={protein:parseInt(document.getElementById('goal
 
 // ══ DIET SUBNAV ══
 function switchDietSub(sub){
-  ['today','history','calendar'].forEach(s=>{
-    document.getElementById(s==='calendar'?'dietPanelCal':'dietPanel'+s.charAt(0).toUpperCase()+s.slice(1)).style.display=s===sub?'block':'none';
-    document.getElementById(s==='calendar'?'dietSubCal':'dietSub'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===sub);
+  const panels={today:'dietPanelToday',calendar:'dietPanelCal'};
+  const btns={today:'dietSubToday',calendar:'dietSubCal'};
+  Object.keys(panels).forEach(s=>{
+    document.getElementById(panels[s]).style.display=s===sub?'block':'none';
+    document.getElementById(btns[s]).classList.toggle('active',s===sub);
   });
-  if(sub==='history')renderDietHistoryFull();
   if(sub==='calendar')renderMiniCal('diet');
 }
 function renderDietHistoryFull(){
