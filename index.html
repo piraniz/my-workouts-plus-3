@@ -967,8 +967,13 @@ function renderMiniCal(tab){
     if(tab==='home'){
       const isDone=completed[iso];
       const planDay=plan.find(p=>p.scheduledDate===iso);
-      if(isDone)dotHTML=`<div class="mc-dot mc-dot-green"></div>`;
-      else if(planDay&&planDay.badge!=='rest'&&!isFuture)dotHTML=`<div class="mc-dot mc-dot-white"></div>`;
+      if(planDay&&planDay.badge==='rest'){
+        dotHTML=`<div class="mc-score" style="color:rgba(255,255,255,.35);font-size:.45rem;letter-spacing:.04em">REST</div>`;
+      } else if(isDone){
+        dotHTML=`<div class="mc-score" style="color:#4ade80">100</div>`;
+      } else if(planDay&&!isFuture){
+        dotHTML=`<div class="mc-score" style="color:#f87171">0</div>`;
+      }
     } else if(tab==='health'){
       const hEntry=healthHistory.find(h=>h.date===iso);
       if(hEntry){
