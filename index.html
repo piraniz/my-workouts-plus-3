@@ -799,8 +799,84 @@ const miniCal={
   diet:{year:0,month:0,selected:null}
 };
 
+
+// ══ TIMEZONE MIGRATION ══
+// Fixes data previously saved with UTC dates instead of local dates
+function runTimezoneMigration(){
+  const today=todayKey();
+  const tomorrow=()=>{const d=new Date();d.setDate(d.getDate()+1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+
+  // Helper: shift a date string back by 1 day
+  function shiftBack(dateStr){
+    const d=new Date(dateStr+'T12:00:00');
+    d.setDate(d.getDate()-1);
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+
+  // Fix health history — any entry dated in the future gets shifted back 1 day
+  const healthHist=ls.get('wl_health_history')||[];
+  let healthFixed=false;
+  const newHealthHist=healthHist.map(entry=>{
+    const d=new Date(entry.date+'T12:00:00');
+    const localToday=new Date();localToday.setHours(0,0,0,0);
+    if(d>localToday){
+      healthFixed=true;
+      const newDate=shiftBack(entry.date);
+      const nd=new Date(newDate+'T12:00:00');
+      return {...entry,date:newDate,displayDate:nd.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
+    }
+    return entry;
+  });
+  if(healthFixed)ls.set('wl_health_history',newHealthHist);
+
+  // Fix diet history
+  const dietHist=ls.get('wl_diet_history')||[];
+  let dietFixed=false;
+  const newDietHist=dietHist.map(entry=>{
+    const d=new Date(entry.date+'T12:00:00');
+    const localToday=new Date();localToday.setHours(0,0,0,0);
+    if(d>localToday){
+      dietFixed=true;
+      const newDate=shiftBack(entry.date);
+      const nd=new Date(newDate+'T12:00:00');
+      return {...entry,date:newDate,displayDate:nd.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
+    }
+    return entry;
+  });
+  if(dietFixed)ls.set('wl_diet_history',newDietHist);
+
+  // Fix daily health/diet/supp keys stored as wl_health_YYYY-MM-DD etc.
+  // Migrate any key dated tomorrow back to today
+  const tmr=tomorrow();
+  ['wl_health_','wl_diet_','wl_supp_'].forEach(prefix=>{
+    const futureKey=prefix+tmr;
+    const val=ls.get(futureKey);
+    if(val!==null){
+      ls.set(prefix+today,val);
+      ls.del(futureKey);
+    }
+  });
+
+  // Fix completed workouts dated in the future
+  const completed=getCompleted();
+  let completedFixed=false;
+  const newCompleted={};
+  Object.keys(completed).forEach(date=>{
+    const d=new Date(date+'T12:00:00');
+    const localToday=new Date();localToday.setHours(0,0,0,0);
+    if(d>localToday){
+      completedFixed=true;
+      newCompleted[shiftBack(date)]=completed[date];
+    } else {
+      newCompleted[date]=completed[date];
+    }
+  });
+  if(completedFixed)saveCompleted(newCompleted);
+}
+
 // ══ INIT ══
 document.addEventListener('DOMContentLoaded',()=>{
+  runTimezoneMigration();
   const now=new Date();
   document.getElementById('todayDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   calYear=now.getFullYear();calMonth=now.getMonth();
