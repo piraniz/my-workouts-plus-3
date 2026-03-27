@@ -571,6 +571,17 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="workout-subtitle" id="workoutSubtitle"></div>
     <div class="workout-date-sub" id="workoutDateSub"></div>
   </div>
+  <!-- REST TIMER -->
+  <div id="restTimerBar" style="display:none;position:sticky;bottom:calc(0px + env(safe-area-inset-bottom,0px));z-index:200;background:#1a1a1a;padding:10px 16px;display:none;align-items:center;justify-content:space-between;gap:12px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f0c040;line-height:1;min-width:64px" id="restTimerDisplay">0:00</div>
+      <div style="font-size:.7rem;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.06em;line-height:1.3">Rest<br>Timer</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="resetRestTimer()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:7px 12px;color:white;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:800;cursor:pointer;">Reset</button>
+      <button onclick="stopRestTimer()" style="background:#f0c040;border:none;border-radius:8px;padding:7px 14px;color:#1a1a1a;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:800;cursor:pointer;">Done</button>
+    </div>
+  </div>
   <div id="exerciseList"></div>
   <button class="finish-btn" onclick="finishWorkout()">FINISH WORKOUT</button>
   <div style="height:20px"></div>
@@ -937,7 +948,7 @@ function renderHomeSub(){
   switchHomeSub(homeSubCurrent);
   renderPasteBanner();
 }
-function goHome(){if(currentDay)saveWS(currentDay.id,workoutState);switchView('home');}
+function goHome(){if(currentDay)saveWS(currentDay.id,workoutState);stopRestTimer();switchView('home');}
 
 // ══ MINI CALENDAR ENGINE ══
 // tab: 'home' | 'health' | 'diet'
@@ -1357,13 +1368,7 @@ function renderExercises(){
   addBtn.onclick=()=>openAddExModal(currentDay.id);container.appendChild(addBtn);
   // Init drag/drop on exercise cards in active workout
   initDragDrop(container,currentDay.id);
-  if(dayData.mobility&&dayData.mobility.length>0){
-    const mobCard=document.createElement('div');mobCard.className='mobility-card';
-    const mobState=workoutState['_mobility']||[];
-    let mobHTML=`<div class="mobility-title">🧘 Mobility Finisher</div>`;
-    dayData.mobility.forEach((item,i)=>{const done=mobState.includes(i);mobHTML+=`<div class="mobility-item" onclick="toggleMobility(${i})"><div class="mob-check ${done?'done':''}" id="mob-${i}"></div><div class="mob-text" style="${done?'text-decoration:line-through;color:#aaa':''}" id="mobtext-${i}">${item}</div></div>`;});
-    mobCard.innerHTML=mobHTML;container.appendChild(mobCard);
-  }
+
 }
 function deleteExercise(exId){
   const plan=getPlan(),dayData=plan.find(d=>d.id===currentDay.id);
@@ -1379,6 +1384,9 @@ function toggleSetDone(exId,si){
   const plan=getPlan(),dayData=plan.find(d=>d.id===currentDay.id),ex=dayData.exercises.find(e=>e.id===exId);
   const allDone=workoutState[exId].sets.every(s=>s.done);
   const nameEl=document.getElementById('exname-'+exId);if(nameEl&&ex)nameEl.textContent=(allDone?'✅ ':'')+ex.name;
+  // auto-start rest timer when set is marked done
+  if(workoutState[exId].sets[si].done) startRestTimer();
+  else stopRestTimer();
 }
 function deleteSet(exId,si){
   if(workoutState[exId].sets.length<=1){showToast('Need at least 1 set');return;}
@@ -1391,7 +1399,7 @@ function deleteSet(exId,si){
 }
 function addSet(exId){workoutState[exId].sets.push({weight:'',reps:'',done:false});saveWS(currentDay.id,workoutState);renderExercises();const sets=document.getElementById('sets-'+exId),toggle=document.getElementById('toggle-'+exId);if(sets){sets.classList.add('open');toggle.classList.add('open');}}
 function toggleMobility(i){if(!workoutState['_mobility'])workoutState['_mobility']=[];const arr=workoutState['_mobility'],idx=arr.indexOf(i);if(idx===-1)arr.push(i);else arr.splice(idx,1);saveWS(currentDay.id,workoutState);const done=arr.includes(i);const check=document.getElementById('mob-'+i),text=document.getElementById('mobtext-'+i);if(check)check.className='mob-check'+(done?' done':'');if(text)text.style=done?'text-decoration:line-through;color:#aaa':'';}
-function finishWorkout(){
+function finishWorkout(){stopRestTimer();
   const history=getHistory(),now=new Date();let totalSets=0,doneSets=0,totalVol=0;
   const plan=getPlan(),dayData=plan.find(d=>d.id===currentDay.id);
   const exercises=dayData.exercises.map(ex=>{const sets=workoutState[ex.id]?.sets||[];totalSets+=sets.length;doneSets+=sets.filter(s=>s.done).length;sets.forEach(s=>{if(s.done&&s.weight&&s.reps)totalVol+=parseFloat(s.weight)*parseInt(s.reps);});return{name:ex.name,sets};});
@@ -2025,6 +2033,44 @@ function initDragDrop(container,dayId){
       });
     }
   });
+}
+
+
+// ══ REST TIMER ══
+let restTimerInterval=null,restTimerSeconds=0;
+
+function startRestTimer(){
+  stopRestTimer();
+  restTimerSeconds=0;
+  const bar=document.getElementById('restTimerBar');
+  if(bar){bar.style.display='flex';}
+  updateRestDisplay();
+  restTimerInterval=setInterval(()=>{
+    restTimerSeconds++;
+    updateRestDisplay();
+  },1000);
+}
+
+function updateRestDisplay(){
+  const el=document.getElementById('restTimerDisplay');
+  if(!el)return;
+  const m=Math.floor(restTimerSeconds/60);
+  const s=restTimerSeconds%60;
+  el.textContent=m+':'+(s<10?'0':'')+s;
+  // colour shift: green < 60s, yellow 60-120s, red > 120s
+  el.style.color=restTimerSeconds<60?'#4ade80':restTimerSeconds<120?'#f0c040':'#f87171';
+}
+
+function resetRestTimer(){
+  restTimerSeconds=0;
+  updateRestDisplay();
+}
+
+function stopRestTimer(){
+  if(restTimerInterval){clearInterval(restTimerInterval);restTimerInterval=null;}
+  const bar=document.getElementById('restTimerBar');
+  if(bar)bar.style.display='none';
+  restTimerSeconds=0;
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
