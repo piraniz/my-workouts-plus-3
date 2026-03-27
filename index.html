@@ -1347,8 +1347,8 @@ function renderExercises(){
       const splitsStr=lastSets.map(s=>`${s.weight||'?'}×${s.reps||'?'}`).join(' · ');
       lastSplitHTML=`<div class="last-session">📊 Last: ${splitsStr}</div>`;
     }
-    let setsHTML=`<div class="col-headers"><div class="col-h">Set</div><div class="col-h">Weight (lbs)</div><div class="col-h">Reps</div><div class="col-h">✓</div></div>`;
-    exState.sets.forEach((set,si)=>{setsHTML+=`<div class="set-row" id="setrow-${ex.id}-${si}"><div class="set-label">${si+1}</div><input class="set-input" type="number" inputmode="decimal" placeholder="0" value="${set.weight}" oninput="updateSet('${ex.id}',${si},'weight',this.value)"><input class="set-input" type="number" inputmode="numeric" placeholder="0" value="${set.reps}" oninput="updateSet('${ex.id}',${si},'reps',this.value)"><button class="set-done-btn ${set.done?'done':''}" onclick="toggleSetDone('${ex.id}',${si})"></button></div>`;});
+    let setsHTML=`<div class="col-headers" style="grid-template-columns:28px 1fr 1fr 36px 28px"><div class="col-h">Set</div><div class="col-h">Weight (lbs)</div><div class="col-h">Reps</div><div class="col-h">✓</div><div class="col-h"></div></div>`;
+    exState.sets.forEach((set,si)=>{setsHTML+=`<div class="set-row" id="setrow-${ex.id}-${si}" style="grid-template-columns:28px 1fr 1fr 36px 28px"><div class="set-label">${si+1}</div><input class="set-input" type="number" inputmode="decimal" placeholder="0" value="${set.weight}" oninput="updateSet('${ex.id}',${si},'weight',this.value)"><input class="set-input" type="number" inputmode="numeric" placeholder="0" value="${set.reps}" oninput="updateSet('${ex.id}',${si},'reps',this.value)"><button class="set-done-btn ${set.done?'done':''}" onclick="toggleSetDone('${ex.id}',${si})"></button><button onclick="deleteSet('${ex.id}',${si})" style="background:none;border:none;color:#ddd;font-size:.9rem;cursor:pointer;padding:0;margin-top:14px;line-height:1" ontouchend="this.style.color='#c0290a'" ontouchstart="this.style.color='#c0290a'">✕</button></div>`;});
     setsHTML+=`<button class="add-set-btn" onclick="addSet('${ex.id}')">+ Add Set</button>`;
     card.innerHTML=`<div class="exercise-top"><div class="drag-handle" title="Drag to reorder">☰</div><div style="flex:1;cursor:pointer" onclick="toggleExercise('${ex.id}')"><div class="exercise-name" id="exname-${ex.id}">${allDone?'✅ ':''}${ex.name}</div><div class="exercise-target" id="extarget-${ex.id}">${ex.target}</div>${lastSplitHTML}</div><div class="ex-actions"><button class="ex-edit-btn" onclick="openExModal('${currentDay.id}','${ex.id}')">✏️</button><button class="ex-del-btn" onclick="deleteExercise('${ex.id}')">🗑</button><button class="ex-toggle ${exIdx===0?'open':''}" id="toggle-${ex.id}" onclick="toggleExercise('${ex.id}')">▾</button></div></div><div class="sets-container ${exIdx===0?'open':''}" id="sets-${ex.id}">${setsHTML}</div>`;
     container.appendChild(card);
@@ -1379,6 +1379,15 @@ function toggleSetDone(exId,si){
   const plan=getPlan(),dayData=plan.find(d=>d.id===currentDay.id),ex=dayData.exercises.find(e=>e.id===exId);
   const allDone=workoutState[exId].sets.every(s=>s.done);
   const nameEl=document.getElementById('exname-'+exId);if(nameEl&&ex)nameEl.textContent=(allDone?'✅ ':'')+ex.name;
+}
+function deleteSet(exId,si){
+  if(workoutState[exId].sets.length<=1){showToast('Need at least 1 set');return;}
+  workoutState[exId].sets.splice(si,1);
+  saveWS(currentDay.id,workoutState);
+  renderExercises();
+  // re-open the sets container
+  const sets=document.getElementById('sets-'+exId),toggle=document.getElementById('toggle-'+exId);
+  if(sets){sets.classList.add('open');}if(toggle){toggle.classList.add('open');}
 }
 function addSet(exId){workoutState[exId].sets.push({weight:'',reps:'',done:false});saveWS(currentDay.id,workoutState);renderExercises();const sets=document.getElementById('sets-'+exId),toggle=document.getElementById('toggle-'+exId);if(sets){sets.classList.add('open');toggle.classList.add('open');}}
 function toggleMobility(i){if(!workoutState['_mobility'])workoutState['_mobility']=[];const arr=workoutState['_mobility'],idx=arr.indexOf(i);if(idx===-1)arr.push(i);else arr.splice(idx,1);saveWS(currentDay.id,workoutState);const done=arr.includes(i);const check=document.getElementById('mob-'+i),text=document.getElementById('mobtext-'+i);if(check)check.className='mob-check'+(done?' done':'');if(text)text.style=done?'text-decoration:line-through;color:#aaa':'';}
@@ -1957,44 +1966,64 @@ function initDragDrop(container,dayId){
         renderDayCards();
       }
     });
-    // Touch drag support
-    let touchStartY=0,touchEl=null;
-    card.addEventListener('touchstart',e=>{
-      touchStartY=e.touches[0].clientY;
-      touchEl=card;
-      dragSrcEl=card;dragSrcDayId=dayId;dragSrcExIdx=idx;
-    },{passive:true});
-    card.addEventListener('touchmove',e=>{
-      e.preventDefault();
-      const touch=e.touches[0];
-      const els=document.elementsFromPoint(touch.clientX,touch.clientY);
-      const target=els.find(el=>el.classList.contains('exercise-card')&&el!==card);
-      container.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
-      if(target)target.classList.add('drag-over');
-    },{passive:false});
-    card.addEventListener('touchend',e=>{
-      const touch=e.changedTouches[0];
-      const els=document.elementsFromPoint(touch.clientX,touch.clientY);
-      const target=els.find(el=>el.classList.contains('exercise-card')&&el!==card);
-      container.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
-      if(!target)return;
-      const targetIdx=parseInt(target.dataset.exIdx);
-      const srcIdx=parseInt(card.dataset.exIdx);
-      if(targetIdx===srcIdx)return;
-      const plan=getPlan();
-      const dayData=plan.find(d=>d.id===dayId);
-      if(!dayData)return;
-      const exs=dayData.exercises;
-      const [moved]=exs.splice(srcIdx,1);
-      exs.splice(targetIdx,0,moved);
-      savePlan(plan);
-      if(currentDay&&currentDay.id===dayId){
-        currentDay=getPlan().find(d=>d.id===dayId);
-        renderExercises();
-      } else {
-        renderDayCards();
-      }
-    });
+    // Touch drag via long-press on the ☰ handle only
+    const handle=card.querySelector('.drag-handle');
+    if(handle){
+      let longPressTimer=null,isDragging=false,startY=0,startX=0;
+      handle.addEventListener('touchstart',e=>{
+        startY=e.touches[0].clientY;startX=e.touches[0].clientX;
+        isDragging=false;
+        longPressTimer=setTimeout(()=>{
+          isDragging=true;
+          dragSrcEl=card;dragSrcDayId=dayId;dragSrcExIdx=idx;
+          card.classList.add('dragging');
+          // haptic if available
+          if(navigator.vibrate)navigator.vibrate(30);
+        },300);
+      },{passive:true});
+      handle.addEventListener('touchmove',e=>{
+        if(!isDragging){
+          // if moved more than 8px before long press fires, cancel it
+          const dx=Math.abs(e.touches[0].clientX-startX);
+          const dy=Math.abs(e.touches[0].clientY-startY);
+          if(dx>8||dy>8){clearTimeout(longPressTimer);longPressTimer=null;}
+          return;
+        }
+        e.preventDefault();
+        const touch=e.touches[0];
+        const els=document.elementsFromPoint(touch.clientX,touch.clientY);
+        const target=els.find(el=>el.classList.contains('exercise-card')&&el!==card);
+        container.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
+        if(target)target.classList.add('drag-over');
+      },{passive:false});
+      handle.addEventListener('touchend',e=>{
+        clearTimeout(longPressTimer);longPressTimer=null;
+        card.classList.remove('dragging');
+        if(!isDragging)return;
+        isDragging=false;
+        const touch=e.changedTouches[0];
+        const els=document.elementsFromPoint(touch.clientX,touch.clientY);
+        const target=els.find(el=>el.classList.contains('exercise-card')&&el!==card);
+        container.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
+        if(!target)return;
+        const targetIdx=parseInt(target.dataset.exIdx);
+        const srcIdx=parseInt(card.dataset.exIdx);
+        if(targetIdx===srcIdx)return;
+        const plan=getPlan();
+        const dayData=plan.find(d=>d.id===dayId);
+        if(!dayData)return;
+        const exs=dayData.exercises;
+        const [moved]=exs.splice(srcIdx,1);
+        exs.splice(targetIdx,0,moved);
+        savePlan(plan);
+        if(currentDay&&currentDay.id===dayId){
+          currentDay=getPlan().find(d=>d.id===dayId);
+          renderExercises();
+        } else {
+          renderDayCards();
+        }
+      });
+    }
   });
 }
 
