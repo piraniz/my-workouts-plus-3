@@ -2037,41 +2037,52 @@ function initDragDrop(container,dayId){
 
 
 // ══ REST TIMER ══
-let restTimerInterval=null,restTimerSeconds=0;
+// ── REST TIMER (timestamp-based so it survives background/app switching) ──
+let restTimerInterval=null;
+let restTimerStartTs=null; // Date.now() when timer started
+
+function getRestElapsed(){
+  if(!restTimerStartTs)return 0;
+  return Math.floor((Date.now()-restTimerStartTs)/1000);
+}
 
 function startRestTimer(){
   stopRestTimer();
-  restTimerSeconds=0;
+  restTimerStartTs=Date.now();
   const bar=document.getElementById('restTimerBar');
-  if(bar){bar.style.display='flex';}
+  if(bar)bar.style.display='flex';
   updateRestDisplay();
-  restTimerInterval=setInterval(()=>{
-    restTimerSeconds++;
-    updateRestDisplay();
-  },1000);
+  restTimerInterval=setInterval(updateRestDisplay,1000);
 }
 
 function updateRestDisplay(){
   const el=document.getElementById('restTimerDisplay');
   if(!el)return;
-  const m=Math.floor(restTimerSeconds/60);
-  const s=restTimerSeconds%60;
+  const secs=getRestElapsed();
+  const m=Math.floor(secs/60);
+  const s=secs%60;
   el.textContent=m+':'+(s<10?'0':'')+s;
-  // colour shift: green < 60s, yellow 60-120s, red > 120s
-  el.style.color=restTimerSeconds<60?'#4ade80':restTimerSeconds<120?'#f0c040':'#f87171';
+  el.style.color=secs<60?'#4ade80':secs<120?'#f0c040':'#f87171';
 }
 
 function resetRestTimer(){
-  restTimerSeconds=0;
+  restTimerStartTs=Date.now();
   updateRestDisplay();
 }
 
 function stopRestTimer(){
   if(restTimerInterval){clearInterval(restTimerInterval);restTimerInterval=null;}
+  restTimerStartTs=null;
   const bar=document.getElementById('restTimerBar');
   if(bar)bar.style.display='none';
-  restTimerSeconds=0;
 }
+
+// When app comes back to foreground, immediately resync the display
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden&&restTimerStartTs){
+    updateRestDisplay();
+  }
+});
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 </script>
