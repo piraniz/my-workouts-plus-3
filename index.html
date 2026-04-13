@@ -2037,50 +2037,88 @@ function initDragDrop(container,dayId){
 
 
 // ══ REST TIMER ══
-// ── REST TIMER (timestamp-based so it survives background/app switching) ──
-let restTimerInterval=null;
-let restTimerStartTs=null; // Date.now() when timer started
-
-function getRestElapsed(){
-  if(!restTimerStartTs)return 0;
-  return Math.floor((Date.now()-restTimerStartTs)/1000);
-}
+// ── REST TIMER ──
+// Uses Date.now() timestamp + requestAnimationFrame so it survives
+// Safari PWA backgrounding, app switching, and screen lock.
+let restTimerStartTs=null;
+let restTimerRAF=null;
+let restTimerLastSec=-1;
 
 function startRestTimer(){
   stopRestTimer();
   restTimerStartTs=Date.now();
+  // Persist start time to localStorage so even a full reload recovers it
+  localStorage.setItem('wl_rest_start', restTimerStartTs);
   const bar=document.getElementById('restTimerBar');
   if(bar)bar.style.display='flex';
-  updateRestDisplay();
-  restTimerInterval=setInterval(updateRestDisplay,1000);
+  restTimerLastSec=-1;
+  restTimerTick();
 }
 
-function updateRestDisplay(){
-  const el=document.getElementById('restTimerDisplay');
-  if(!el)return;
-  const secs=getRestElapsed();
-  const m=Math.floor(secs/60);
-  const s=secs%60;
-  el.textContent=m+':'+(s<10?'0':'')+s;
-  el.style.color=secs<60?'#4ade80':secs<120?'#f0c040':'#f87171';
+function restTimerTick(){
+  if(!restTimerStartTs)return;
+  const secs=Math.floor((Date.now()-restTimerStartTs)/1000);
+  // Only update DOM when the second actually changes
+  if(secs!==restTimerLastSec){
+    restTimerLastSec=secs;
+    const el=document.getElementById('restTimerDisplay');
+    if(el){
+      const m=Math.floor(secs/60);
+      const s=secs%60;
+      el.textContent=m+':'+(s<10?'0':'')+s;
+      el.style.color=secs<60?'#4ade80':secs<120?'#f0c040':'#f87171';
+    }
+  }
+  restTimerRAF=requestAnimationFrame(restTimerTick);
 }
 
 function resetRestTimer(){
+  if(!restTimerStartTs)return;
   restTimerStartTs=Date.now();
-  updateRestDisplay();
+  localStorage.setItem('wl_rest_start', restTimerStartTs);
+  restTimerLastSec=-1;
 }
 
 function stopRestTimer(){
-  if(restTimerInterval){clearInterval(restTimerInterval);restTimerInterval=null;}
+  if(restTimerRAF){cancelAnimationFrame(restTimerRAF);restTimerRAF=null;}
   restTimerStartTs=null;
+  restTimerLastSec=-1;
+  localStorage.removeItem('wl_rest_start');
   const bar=document.getElementById('restTimerBar');
   if(bar)bar.style.display='none';
+  const el=document.getElementById('restTimerDisplay');
+  if(el)el.textContent='0:00';
 }
 
-// When app comes back to foreground, immediately resync the display
+// Resume timer if app was backgrounded — fires on every return to foreground
 document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden&&restTimerStartTs){
-    updateRestDisplay();
+  if(!document.hidden){
+    const saved=localStorage.getItem('wl_rest_start');
+    if(saved&&!restTimerStartTs){
+      // App was killed or reloaded while timer was running — restore it
+      restTimerStartTs=parseInt(saved);
+      const bar=document.getElementById('restTimerBar');
+      if(bar)bar.style.display='flex';
+    }
+    if(restTimerStartTs&&!restTimerRAF){
+      restTimerLastSec=-1;
+      restTimerTick();
+    }
+  } else {
+    // Going to background — cancel RAF (saves battery), timestamp persists
+    if(restTimerRAF){cancelAnimationFrame(restTimerRAF);restTimerRAF=null;}
+  }
+});
+
+// Also catch focus event for older Safari behaviour
+window.addEventListener('focus',()=>{
+  const saved=localStorage.getItem('wl_rest_start');
+  if(saved&&!restTimerRAF){
+    restTimerStartTs=parseInt(saved);
+    const bar=document.getElementById('restTimerBar');
+    if(bar)bar.style.display='flex';
+    restTimerLastSec=-1;
+    restTimerTick();
   }
 });
 
