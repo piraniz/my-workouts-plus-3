@@ -342,6 +342,35 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .goals-save{flex:1;background:var(--accent);color:white;border:none;border-radius:10px;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;cursor:pointer;}
 .goals-cancel{background:var(--input-bg);color:var(--muted);border:none;border-radius:10px;padding:14px 18px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;}
 .over-budget{color:var(--red)!important;}.on-track{color:var(--green)!important;}
+/* ── MEAL PLANNER ── */
+.meal-slot-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden;}
+.meal-slot-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;}
+.meal-slot-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--accent);}
+.meal-slot-time{font-size:.68rem;color:var(--muted);font-weight:700;letter-spacing:.06em;}
+.meal-slot-macros{display:flex;gap:8px;padding:0 14px 10px;flex-wrap:wrap;}
+.meal-macro-chip{font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:20px;}
+.meal-item-row{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-top:1px solid var(--border);}
+.meal-item-name{font-size:.82rem;font-weight:700;color:var(--text);flex:1;}
+.meal-item-cals{font-size:.75rem;font-weight:800;color:var(--muted);margin-left:8px;}
+.meal-item-del{background:none;border:none;color:#ddd;font-size:.9rem;cursor:pointer;padding:0 0 0 8px;}
+.meal-add-item-btn{width:100%;background:var(--input-bg);border:none;padding:9px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:800;color:var(--muted);cursor:pointer;text-align:center;}
+.meal-day-tab{flex-shrink:0;padding:6px 12px;border-radius:20px;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);}
+.meal-day-tab.active{background:#f0c040;color:#1a1a1a;}
+.meal-macro-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.meal-macro-bar-label{font-size:.68rem;font-weight:800;color:var(--muted);width:52px;text-transform:uppercase;letter-spacing:.04em;}
+.meal-macro-bar-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.meal-macro-bar-fill{height:100%;border-radius:3px;transition:width .4s ease;}
+.meal-macro-bar-val{font-size:.7rem;font-weight:800;width:52px;text-align:right;}
+.meal-summary-cals{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);line-height:1;}
+.meal-template-card{background:white;border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.meal-template-name{font-size:.85rem;font-weight:800;color:var(--text);}
+.meal-template-sub{font-size:.7rem;color:var(--muted);font-weight:600;margin-top:2px;}
+.meal-template-actions{display:flex;gap:6px;}
+.meal-tpl-btn{background:var(--input-bg);border:none;border-radius:8px;padding:6px 10px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;color:var(--accent);}
+.meal-tpl-del{color:var(--red);}
+.meal-slot-actions{display:flex;gap:4px;}
+.meal-slot-action-btn{background:none;border:none;font-size:.85rem;cursor:pointer;padding:2px 4px;}
+
 /* EXERCISE SELECT + DRAG */
 .ex-select-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);background:white;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;margin-right:2px;}
 .ex-select-check.checked{background:var(--accent);border-color:var(--accent);}
@@ -687,6 +716,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <div class="view" id="viewDiet">
   <div class="subnav-wrap">
     <button class="subnav-btn active" id="dietSubToday" onclick="switchDietSub('today')">Today</button>
+    <button class="subnav-btn" id="dietSubMeals" onclick="switchDietSub('meals')">Meals</button>
     <button class="subnav-btn" id="dietSubCal" onclick="switchDietSub('calendar')">Calendar</button>
   </div>
   <div id="dietPanelToday">
@@ -733,6 +763,75 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="mini-cal-wrap" id="dietMiniCal"></div>
     <div id="dietMiniCalDetail"></div>
     <div style="height:20px"></div>
+  </div>
+
+  <!-- MEALS PANEL -->
+  <div id="dietPanelMeals" style="display:none">
+    <!-- Day selector -->
+    <div style="background:var(--accent);padding:14px 16px 0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:rgba(255,255,255,.5)">MEAL PLAN</div>
+        <div style="display:flex;gap:6px">
+          <button onclick="mealPlanPrevDay()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;width:32px;height:32px;color:white;font-size:1rem;cursor:pointer;">‹</button>
+          <button onclick="mealPlanNextDay()" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;width:32px;height:32px;color:white;font-size:1rem;cursor:pointer;">›</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;" id="mealDayTabs"></div>
+    </div>
+    <!-- Macro summary bar -->
+    <div id="mealMacroBar" style="background:#f7f7f5;padding:12px 16px;border-bottom:1px solid var(--border)"></div>
+    <!-- Meal slots -->
+    <div id="mealSlotList" style="padding:12px 16px 0;"></div>
+    <!-- Add meal slot -->
+    <div style="padding:0 16px 12px">
+      <button onclick="addMealSlot()" style="width:100%;border:2px dashed var(--border);border-radius:var(--radius);padding:13px;background:transparent;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--muted);cursor:pointer;">+ Add Meal</button>
+    </div>
+    <!-- Templates -->
+    <div style="padding:0 16px 8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.05em;color:var(--accent)">SAVED TEMPLATES</div>
+        <button onclick="saveMealTemplate()" style="background:var(--accent);color:white;border:none;border-radius:8px;padding:6px 12px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;">Save Today as Template</button>
+      </div>
+      <div id="mealTemplateList"></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- MEAL ITEM MODAL -->
+  <div id="mealItemModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);align-items:flex-end;">
+    <div style="background:white;border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-height:85vh;overflow-y:auto;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;margin-bottom:16px" id="mealItemModalTitle">Add Food Item</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div style="font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Food Name</div>
+          <input id="mealItemName" type="text" placeholder="e.g. Grilled Salmon" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <div style="font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Calories</div>
+            <input id="mealItemCals" type="number" inputmode="numeric" placeholder="0" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Protein (g)</div>
+            <input id="mealItemProtein" type="number" inputmode="numeric" placeholder="0" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Carbs (g)</div>
+            <input id="mealItemCarbs" type="number" inputmode="numeric" placeholder="0" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Fat (g)</div>
+            <input id="mealItemFat" type="number" inputmode="numeric" placeholder="0" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;">
+          </div>
+        </div>
+        <div style="font-size:.72rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Notes (optional)</div>
+        <input id="mealItemNotes" type="text" placeholder="e.g. air fryer, no salt" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:18px">
+        <button onclick="closeMealItemModal()" style="flex:1;padding:13px;border:2px solid var(--border);border-radius:12px;background:white;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;">Cancel</button>
+        <button onclick="saveMealItem()" style="flex:2;padding:13px;border:none;border-radius:12px;background:var(--accent);color:white;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;">Save Item</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1748,13 +1847,14 @@ function saveGoals(){const goals={protein:parseInt(document.getElementById('goal
 
 // ══ DIET SUBNAV ══
 function switchDietSub(sub){
-  const panels={today:'dietPanelToday',calendar:'dietPanelCal'};
-  const btns={today:'dietSubToday',calendar:'dietSubCal'};
+  const panels={today:'dietPanelToday',meals:'dietPanelMeals',calendar:'dietPanelCal'};
+  const btns={today:'dietSubToday',meals:'dietSubMeals',calendar:'dietSubCal'};
   Object.keys(panels).forEach(s=>{
     document.getElementById(panels[s]).style.display=s===sub?'block':'none';
     document.getElementById(btns[s]).classList.toggle('active',s===sub);
   });
   if(sub==='calendar')renderMiniCal('diet');
+  if(sub==='meals')renderMealPlanner();
 }
 function renderDietHistoryFull(){
   const history=getDietHistory(),goals=getDietGoals(),container=document.getElementById('dietHistoryFull');container.innerHTML='';
@@ -2106,6 +2206,336 @@ document.addEventListener('visibilitychange',()=>{
 });
 // focus as third fallback
 window.addEventListener('focus',()=>resumeRestTimerIfActive());
+
+
+// ══ MEAL PLANNER ══
+const MEAL_PLAN_KEY='wl_meal_plans';
+const MEAL_TPL_KEY='wl_meal_templates';
+const DAY_LABELS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAY_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MEAL_TIMES=['7:00 AM','8:00 AM','9:00 AM','10:00 AM','11:00 AM','11:45 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM','10:00 PM','11:00 PM'];
+const DEFAULT_MEAL_SLOTS=['Breakfast','Morning Snack','Lunch','Afternoon Snack','Pre-Workout','Dinner','Late Dinner'];
+
+let mealPlanDay=new Date().getDay(); // 0=Sun
+let mealEditingSlotId=null;
+let mealEditingItemIdx=null;
+
+function getMealPlans(){return ls.get(MEAL_PLAN_KEY)||{};}
+function saveMealPlans(p){ls.set(MEAL_PLAN_KEY,p);}
+function getMealTemplates(){return ls.get(MEAL_TPL_KEY)||[];}
+function saveMealTemplates(t){ls.set(MEAL_TPL_KEY,t);}
+
+function getMealPlanForDay(dayIdx){
+  const plans=getMealPlans();
+  if(!plans[dayIdx]){
+    // Create default slots for this day
+    plans[dayIdx]={slots:DEFAULT_MEAL_SLOTS.map((name,i)=>({
+      id:'slot_'+dayIdx+'_'+i,name,time:'',items:[]
+    }))};
+    saveMealPlans(plans);
+  }
+  return plans[dayIdx];
+}
+
+function mealPlanPrevDay(){
+  mealPlanDay=(mealPlanDay+6)%7;
+  renderMealPlanner();
+}
+function mealPlanNextDay(){
+  mealPlanDay=(mealPlanDay+1)%7;
+  renderMealPlanner();
+}
+
+function renderMealPlanner(){
+  renderMealDayTabs();
+  renderMealMacroBar();
+  renderMealSlots();
+  renderMealTemplates();
+}
+
+function renderMealDayTabs(){
+  const container=document.getElementById('mealDayTabs');
+  if(!container)return;
+  container.innerHTML='';
+  DAY_SHORT.forEach((d,i)=>{
+    const btn=document.createElement('button');
+    btn.className='meal-day-tab'+(i===mealPlanDay?' active':'');
+    btn.textContent=d;
+    btn.onclick=()=>{mealPlanDay=i;renderMealPlanner();};
+    container.appendChild(btn);
+  });
+}
+
+function getMealDayTotals(dayIdx){
+  const plan=getMealPlanForDay(dayIdx);
+  let cals=0,protein=0,carbs=0,fat=0;
+  plan.slots.forEach(slot=>{
+    slot.items.forEach(item=>{
+      cals+=Number(item.cals)||0;
+      protein+=Number(item.protein)||0;
+      carbs+=Number(item.carbs)||0;
+      fat+=Number(item.fat)||0;
+    });
+  });
+  return{cals,protein,carbs,fat};
+}
+
+function renderMealMacroBar(){
+  const container=document.getElementById('mealMacroBar');
+  if(!container)return;
+  const goals=getDietGoals();
+  const t=getMealDayTotals(mealPlanDay);
+  const calPct=Math.min(Math.round(t.cals/goals.cals*100),100);
+  const pPct=Math.min(Math.round(t.protein/goals.protein*100),100);
+  const cPct=Math.min(Math.round(t.carbs/goals.carbs*100),100);
+  const fPct=Math.min(Math.round(t.fat/goals.fat*100),100);
+  const dayName=DAY_LABELS[mealPlanDay];
+  container.innerHTML=`
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">
+      <div>
+        <div style="font-size:.65rem;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">${dayName}</div>
+        <div class="meal-summary-cals">${t.cals}<span style="font-size:.7rem;font-weight:700;color:var(--muted);margin-left:4px">/ ${goals.cals} cal</span></div>
+      </div>
+      <div style="display:flex;gap:10px;text-align:center">
+        <div><div style="font-size:.9rem;font-weight:800;color:#ef4444">${t.protein}g</div><div style="font-size:.6rem;color:var(--muted);font-weight:700">Protein</div></div>
+        <div><div style="font-size:.9rem;font-weight:800;color:#f59e0b">${t.carbs}g</div><div style="font-size:.6rem;color:var(--muted);font-weight:700">Carbs</div></div>
+        <div><div style="font-size:.9rem;font-weight:800;color:#3b82f6">${t.fat}g</div><div style="font-size:.6rem;color:var(--muted);font-weight:700">Fat</div></div>
+      </div>
+    </div>
+    <div class="meal-macro-bar-row"><div class="meal-macro-bar-label">Calories</div><div class="meal-macro-bar-track"><div class="meal-macro-bar-fill" style="width:${calPct}%;background:#10b981"></div></div><div class="meal-macro-bar-val" style="color:#10b981">${calPct}%</div></div>
+    <div class="meal-macro-bar-row"><div class="meal-macro-bar-label">Protein</div><div class="meal-macro-bar-track"><div class="meal-macro-bar-fill" style="width:${pPct}%;background:#ef4444"></div></div><div class="meal-macro-bar-val" style="color:#ef4444">${t.protein}/${goals.protein}g</div></div>
+    <div class="meal-macro-bar-row"><div class="meal-macro-bar-label">Carbs</div><div class="meal-macro-bar-track"><div class="meal-macro-bar-fill" style="width:${cPct}%;background:#f59e0b"></div></div><div class="meal-macro-bar-val" style="color:#f59e0b">${t.carbs}/${goals.carbs}g</div></div>
+    <div class="meal-macro-bar-row"><div class="meal-macro-bar-label">Fat</div><div class="meal-macro-bar-track"><div class="meal-macro-bar-fill" style="width:${fPct}%;background:#3b82f6"></div></div><div class="meal-macro-bar-val" style="color:#3b82f6">${t.fat}/${goals.fat}g</div></div>`;
+}
+
+function renderMealSlots(){
+  const container=document.getElementById('mealSlotList');
+  if(!container)return;
+  container.innerHTML='';
+  const plan=getMealPlanForDay(mealPlanDay);
+  plan.slots.forEach((slot,si)=>{
+    const slotCals=slot.items.reduce((s,i)=>s+(Number(i.cals)||0),0);
+    const slotProtein=slot.items.reduce((s,i)=>s+(Number(i.protein)||0),0);
+    const slotCarbs=slot.items.reduce((s,i)=>s+(Number(i.carbs)||0),0);
+    const slotFat=slot.items.reduce((s,i)=>s+(Number(i.fat)||0),0);
+    const card=document.createElement('div');
+    card.className='meal-slot-card';
+    let itemsHTML=slot.items.map((item,ii)=>`
+      <div class="meal-item-row">
+        <div style="flex:1">
+          <div class="meal-item-name">${item.name}</div>
+          ${item.notes?`<div style="font-size:.65rem;color:var(--muted);font-weight:600;margin-top:1px">${item.notes}</div>`:''}
+          <div style="font-size:.65rem;color:var(--muted);font-weight:600;margin-top:2px">${item.protein||0}g P · ${item.carbs||0}g C · ${item.fat||0}g F</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <div class="meal-item-cals">${item.cals||0} cal</div>
+          <button class="meal-item-del" onclick="editMealItem('${slot.id}',${ii})">✏️</button>
+          <button class="meal-item-del" onclick="deleteMealItem('${slot.id}',${ii})">✕</button>
+        </div>
+      </div>`).join('');
+    card.innerHTML=`
+      <div class="meal-slot-header">
+        <div>
+          <div class="meal-slot-name">${slot.name}</div>
+          ${slot.time?`<div class="meal-slot-time">🕐 ${slot.time}</div>`:''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${slotCals>0?`<div style="font-size:.8rem;font-weight:800;color:var(--muted)">${slotCals} cal</div>`:''}
+          <div class="meal-slot-actions">
+            <button class="meal-slot-action-btn" onclick="editMealSlot('${slot.id}')" title="Edit slot">✏️</button>
+            <button class="meal-slot-action-btn" onclick="deleteMealSlot('${slot.id}')" title="Delete slot" style="color:#ddd">🗑</button>
+          </div>
+        </div>
+      </div>
+      ${slotCals>0?`<div class="meal-slot-macros">
+        <span class="meal-macro-chip" style="background:#fef2f2;color:#ef4444">${slotProtein}g protein</span>
+        <span class="meal-macro-chip" style="background:#fffbeb;color:#f59e0b">${slotCarbs}g carbs</span>
+        <span class="meal-macro-chip" style="background:#eff6ff;color:#3b82f6">${slotFat}g fat</span>
+      </div>`:''}
+      ${itemsHTML}
+      <button class="meal-add-item-btn" onclick="openMealItemModal('${slot.id}',null)">+ Add Food Item</button>`;
+    container.appendChild(card);
+  });
+}
+
+function addMealSlot(){
+  const name=prompt('Meal name (e.g. Lunch, Pre-Workout):');
+  if(!name||!name.trim())return;
+  const plans=getMealPlans();
+  const plan=getMealPlanForDay(mealPlanDay);
+  const id='slot_'+mealPlanDay+'_'+Date.now();
+  plan.slots.push({id,name:name.trim(),time:'',items:[]});
+  plans[mealPlanDay]=plan;
+  saveMealPlans(plans);
+  renderMealPlanner();
+}
+
+function editMealSlot(slotId){
+  const plans=getMealPlans();
+  const plan=getMealPlanForDay(mealPlanDay);
+  const slot=plan.slots.find(s=>s.id===slotId);
+  if(!slot)return;
+  const name=prompt('Meal name:',slot.name);
+  if(name===null)return;
+  const time=prompt('Time (e.g. 11:45 AM) — leave blank to skip:',slot.time||'');
+  slot.name=name.trim()||slot.name;
+  slot.time=time?time.trim():'';
+  plans[mealPlanDay]=plan;
+  saveMealPlans(plans);
+  renderMealPlanner();
+}
+
+function deleteMealSlot(slotId){
+  if(!confirm('Delete this meal slot and all its items?'))return;
+  const plans=getMealPlans();
+  const plan=getMealPlanForDay(mealPlanDay);
+  plan.slots=plan.slots.filter(s=>s.id!==slotId);
+  plans[mealPlanDay]=plan;
+  saveMealPlans(plans);
+  renderMealPlanner();
+}
+
+function openMealItemModal(slotId,itemIdx){
+  mealEditingSlotId=slotId;
+  mealEditingItemIdx=itemIdx;
+  // Pre-fill if editing
+  if(itemIdx!==null){
+    const plan=getMealPlanForDay(mealPlanDay);
+    const slot=plan.slots.find(s=>s.id===slotId);
+    const item=slot?slot.items[itemIdx]:null;
+    if(item){
+      document.getElementById('mealItemName').value=item.name||'';
+      document.getElementById('mealItemCals').value=item.cals||'';
+      document.getElementById('mealItemProtein').value=item.protein||'';
+      document.getElementById('mealItemCarbs').value=item.carbs||'';
+      document.getElementById('mealItemFat').value=item.fat||'';
+      document.getElementById('mealItemNotes').value=item.notes||'';
+      document.getElementById('mealItemModalTitle').textContent='Edit Food Item';
+    }
+  } else {
+    document.getElementById('mealItemName').value='';
+    document.getElementById('mealItemCals').value='';
+    document.getElementById('mealItemProtein').value='';
+    document.getElementById('mealItemCarbs').value='';
+    document.getElementById('mealItemFat').value='';
+    document.getElementById('mealItemNotes').value='';
+    document.getElementById('mealItemModalTitle').textContent='Add Food Item';
+  }
+  const modal=document.getElementById('mealItemModal');
+  modal.style.display='flex';
+}
+
+function closeMealItemModal(){
+  document.getElementById('mealItemModal').style.display='none';
+  mealEditingSlotId=null;
+  mealEditingItemIdx=null;
+}
+
+function saveMealItem(){
+  const name=document.getElementById('mealItemName').value.trim();
+  if(!name){showToast('Enter a food name');return;}
+  const item={
+    name,
+    cals:document.getElementById('mealItemCals').value||'0',
+    protein:document.getElementById('mealItemProtein').value||'0',
+    carbs:document.getElementById('mealItemCarbs').value||'0',
+    fat:document.getElementById('mealItemFat').value||'0',
+    notes:document.getElementById('mealItemNotes').value.trim()
+  };
+  const plans=getMealPlans();
+  const plan=getMealPlanForDay(mealPlanDay);
+  const slot=plan.slots.find(s=>s.id===mealEditingSlotId);
+  if(!slot){closeMealItemModal();return;}
+  if(mealEditingItemIdx!==null){
+    slot.items[mealEditingItemIdx]=item;
+  } else {
+    slot.items.push(item);
+  }
+  plans[mealPlanDay]=plan;
+  saveMealPlans(plans);
+  closeMealItemModal();
+  renderMealPlanner();
+  showToast(mealEditingItemIdx!==null?'Item updated ✓':'Item added ✓');
+}
+
+function editMealItem(slotId,itemIdx){
+  openMealItemModal(slotId,itemIdx);
+}
+
+function deleteMealItem(slotId,itemIdx){
+  const plans=getMealPlans();
+  const plan=getMealPlanForDay(mealPlanDay);
+  const slot=plan.slots.find(s=>s.id===slotId);
+  if(!slot)return;
+  slot.items.splice(itemIdx,1);
+  plans[mealPlanDay]=plan;
+  saveMealPlans(plans);
+  renderMealPlanner();
+  showToast('Item removed');
+}
+
+function saveMealTemplate(){
+  const name=prompt('Template name (e.g. Monday High Carb):');
+  if(!name||!name.trim())return;
+  const plan=getMealPlanForDay(mealPlanDay);
+  const totals=getMealDayTotals(mealPlanDay);
+  const templates=getMealTemplates();
+  templates.unshift({
+    id:'tpl_'+Date.now(),
+    name:name.trim(),
+    dayLabel:DAY_LABELS[mealPlanDay],
+    cals:totals.cals,
+    protein:totals.protein,
+    carbs:totals.carbs,
+    fat:totals.fat,
+    slots:JSON.parse(JSON.stringify(plan.slots))
+  });
+  saveMealTemplates(templates);
+  renderMealTemplates();
+  showToast('Template saved ✓');
+}
+
+function applyMealTemplate(tplId){
+  const templates=getMealTemplates();
+  const tpl=templates.find(t=>t.id===tplId);
+  if(!tpl)return;
+  if(!confirm('Apply "'+tpl.name+'" to '+DAY_LABELS[mealPlanDay]+'? This replaces the current plan.'))return;
+  const plans=getMealPlans();
+  // Give fresh slot IDs
+  const newSlots=tpl.slots.map((s,i)=>({...s,id:'slot_'+mealPlanDay+'_tpl_'+i+'_'+Date.now(),items:[...s.items]}));
+  plans[mealPlanDay]={slots:newSlots};
+  saveMealPlans(plans);
+  renderMealPlanner();
+  showToast('Template applied ✓');
+}
+
+function deleteMealTemplate(tplId){
+  const templates=getMealTemplates().filter(t=>t.id!==tplId);
+  saveMealTemplates(templates);
+  renderMealTemplates();
+  showToast('Template deleted');
+}
+
+function renderMealTemplates(){
+  const container=document.getElementById('mealTemplateList');
+  if(!container)return;
+  const templates=getMealTemplates();
+  if(!templates.length){
+    container.innerHTML=`<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem;font-weight:600">No templates yet. Build a day and save it.</div>`;
+    return;
+  }
+  container.innerHTML=templates.map(t=>`
+    <div class="meal-template-card">
+      <div>
+        <div class="meal-template-name">${t.name}</div>
+        <div class="meal-template-sub">${t.cals} cal · ${t.protein}g P · ${t.carbs}g C · ${t.fat}g F</div>
+      </div>
+      <div class="meal-template-actions">
+        <button class="meal-tpl-btn" onclick="applyMealTemplate('${t.id}')">Apply</button>
+        <button class="meal-tpl-btn meal-tpl-del" onclick="deleteMealTemplate('${t.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 </script>
